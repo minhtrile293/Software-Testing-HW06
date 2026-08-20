@@ -438,9 +438,9 @@ _AI-generated in 4 steps: (1) auth & role, (2) empty/missing body, (3) row valid
 | Pre-request scripts | `X-Student-Id: 23127273`; executor applies method/path/body/auth from CSV row |
 | Tests / assertions | `assertion_profile` column → `[SPEC]` switch (584 assertions total with `-d`) |
 | **Collection Runner + data file** | **`postman/data/fr06|fr07|fr16-*.csv`** — 140 rows; Newman `-d` required |
-| Monitors | |
-| Mock servers | |
-| Workspaces | |
+| Monitors | Not used — scheduled runs replaced by **GitHub Actions** on push |
+| Mock servers | Not used — SUT must be live (`127.0.0.1:3000`); mocks would hide integration bugs |
+| Workspaces | Local Postman workspace; collections exported to repo |
 
 ---
 

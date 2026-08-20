@@ -3,5 +3,6 @@
 .idea/
 .vscode/
 node_modules/
+.venv/
 temp/
 *.pdf

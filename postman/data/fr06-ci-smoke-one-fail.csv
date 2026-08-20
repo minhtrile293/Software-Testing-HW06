@@ -1,0 +1,5 @@
+tc_id,description,method,path,body,auth_mode,content_type,extra_headers,assertion_profile,expected_status,pre_steps,notes
+FR06-TC-001,Valid product odd ID,GET,/api/products/1,,inherit,,{},fr06_s200_schema_full,,[],CI smoke pass
+FR06-TC-005,Non-existent ID (intentional fail),GET,/api/products/99999,,inherit,,{},status_404,,[],CI demo — expects 404 SUT returns 200
+FR06-TC-021,Public read without Authorization,GET,/api/products/1,,none,,{},fr06_public_200,,[],CI smoke
+FR06-TC-031,Content-Type JSON,GET,/api/products/1,,inherit,,{},fr06_content_type,,[],CI smoke

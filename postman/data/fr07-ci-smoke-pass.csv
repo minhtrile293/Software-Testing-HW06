@@ -1,0 +1,6 @@
+tc_id,description,method,path,body,auth_mode,content_type,extra_headers,assertion_profile,expected_status,pre_steps,notes
+FR07-TC-001,GET cart no token,GET,/api/cart,,none,,{},status_401_403,,[],CI smoke
+FR07-TC-003,GET cart invalid token,GET,/api/cart,,invalid,,{},status_403,,[],CI smoke
+FR07-TC-005,GET empty cart fresh user,GET,/api/cart,,cartFresh,,{},fr07_s200_empty_cart,,[],CI smoke
+FR07-TC-008,POST valid item,POST,/api/cart,"{""id"":1,""name"":""iPhone 15 Pro Max"",""price"":30000000,""quantity"":2}",user,application/json,{},fr07_s200_added,,[],CI smoke
+FR07-TC-006,GET cart returns array,GET,/api/cart,,user,,{},fr07_s200_array,,[],CI smoke

@@ -1,0 +1,6 @@
+tc_id,description,method,path,body,auth_mode,content_type,extra_headers,assertion_profile,expected_status,pre_steps,notes
+FR16-TC-001,No auth,POST,/api/admin/import-products,"{""products"":[{""name"":""NoAuth"",""price"":10000,""description"":""d"",""imageUrl"":"""",""category_id"":1}]}",none,application/json,{},status_401_403,,[],CI smoke
+FR16-TC-004,Empty products array,POST,/api/admin/import-products,"{""products"":[]}",admin,application/json,{},status_400,,[],CI smoke
+FR16-TC-005,Missing products key,POST,/api/admin/import-products,{},admin,application/json,{},status_400,,[],CI smoke
+FR16-TC-003,Admin valid import,POST,/api/admin/import-products,"{""products"":[{""name"":""ValidImport"",""price"":10000,""description"":""d"",""imageUrl"":"""",""category_id"":1}]}",admin,application/json,{},fr16_s200_import_ok,,[],CI smoke
+FR16-TC-014,Response schema fields,POST,/api/admin/import-products,"{""products"":[{""name"":""SchemaCheck"",""price"":10000,""description"":""d"",""imageUrl"":"""",""category_id"":1}]}",admin,application/json,{},fr16_schema_fields,,[],CI smoke

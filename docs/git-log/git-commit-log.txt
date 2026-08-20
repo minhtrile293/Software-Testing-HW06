@@ -1,5 +1,133 @@
-# Git commit log — HW06 API Testing
+574fe9de6c0bea85ad10e7065c9ea7aedb8ed550
+minhtrile293 <23127273@student.hcmus.edu.vn>
+2026-08-20 09:24:07 +0700
+feat(FR06): execute API tests, capture bug evidence, prepare GitHub issues
+Phase 2 Newman run (73/73 assertions). Bug SVG evidence and issue scripts for FR06-BUG-001..005.
 
-> Export with: `git log --oneline --reverse > docs/git-log/git-commit-log.txt`
+Co-authored-by: Cursor <cursoragent@cursor.com>
 
-_(Populate after each pipeline step: generate, audit, extend, execute per API.)_
+---
+7ef1a8f02e8c23943f6817b35bbd1fe8266ce247
+minhtrile293 <23127273@student.hcmus.edu.vn>
+2026-08-20 09:24:46 +0700
+docs(FR06): link GitHub Issues #1-#5 in bug report and main report
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+---
+aedd480babd1e311640e1e771c54a2a74bacfa73
+minhtrile293 <23127273@student.hcmus.edu.vn>
+2026-08-20 09:36:59 +0700
+fix(FR06): spec-based Newman assertions — fail exposes bugs
+Rewrite collection, audit, and execute sections. 41/65 assertions pass, 24 fail mapping to 5 bugs. Never assert SUT buggy behavior as expected.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+---
+94da21810eea6acf024c30cda85fbf27f3c008c5
+minhtrile293 <23127273@student.hcmus.edu.vn>
+2026-08-20 09:43:37 +0700
+docs(FR06): add BUG-006 rate limiting (SEC07) — GitHub Issue #6
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+---
+b3942f11e865facf6f2094f4e4e87c50c9dae977
+minhtrile293 <23127273@student.hcmus.edu.vn>
+2026-08-20 10:36:01 +0700
+chore: add data-driven Postman builder library and CSV docs
+Shared executor template for Collection Runner / Newman -d workflows.
+Document CSV column schema in postman/data/README.md.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+---
+905fb9e58cb864fa06b95600fa71976b6d2e54e9
+minhtrile293 <23127273@student.hcmus.edu.vn>
+2026-08-20 10:36:04 +0700
+refactor(FR06): migrate product detail tests to data-driven CSV
+Move all request input to fr06-product-detail-data.csv (48 rows).
+Collection uses a single executor request with assertion_profile column.
+Regenerate Newman HTML report with -d flag.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+---
+b82fe06ec4e454e5924c282c5587deaa7b13a809
+minhtrile293 <23127273@student.hcmus.edu.vn>
+2026-08-20 10:36:06 +0700
+feat(FR07): shopping cart API tests, Newman run, and bug evidence
+Add 46 data-driven test rows, collection, and spec-based assertions.
+Capture 3 bug SVGs; GitHub issues #7-#9. Newman: 26 failed assertions.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+---
+48aa56e4d2d5fbb33f80ff397eb0ef7be6543cf5
+minhtrile293 <23127273@student.hcmus.edu.vn>
+2026-08-20 10:36:10 +0700
+feat(FR16): product import API tests, Newman run, and bug evidence
+Add 46 data-driven test rows for POST /api/admin/import-products.
+Capture 6 bug SVGs; GitHub issues #10-#15. Newman: 23 failed assertions.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+---
+feb158c3a177cb1a6bfcd94fb1b80a7687ac48c3
+minhtrile293 <23127273@student.hcmus.edu.vn>
+2026-08-20 10:36:11 +0700
+docs: update main report and bug report for FR07/FR16
+Add full pipeline sections for shopping cart and product import APIs.
+Document 15 total bugs, data-driven CSV workflow, and Newman -d commands.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+---
+d479fe471a7d1fdd31721faa00b0b001aad8cdbb
+minhtrile293 <23127273@student.hcmus.edu.vn>
+2026-08-20 10:54:22 +0700
+ci: add SUT startup and Newman runner scripts for GitHub Actions
+Clone eshop-sut, start backend on :3000, run FR06/07/16 with profile arg.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+---
+8c66f2eb8700916094c058da9342a2588b256907
+minhtrile293 <23127273@student.hcmus.edu.vn>
+2026-08-20 10:54:22 +0700
+ci: add smoke CSV profiles for pass and one-fail demo runs
+Default profile ci-smoke-pass for green pipeline; ci-smoke-one-fail for TA demo.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+---
+864f5880f8bcdce0d287d92cb26d46fbd6d7e41c
+minhtrile293 <23127273@student.hcmus.edu.vn>
+2026-08-20 10:54:22 +0700
+ci: wire GitHub Actions workflow with SUT startup and Newman profiles
+Install build deps for sqlite3, read profile from ci-cd/profile.txt or workflow_dispatch.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+---
+cb9b225444295603c8dd4096b0a4be9d3086ea33
+minhtrile293 <23127273@student.hcmus.edu.vn>
+2026-08-20 10:54:22 +0700
+docs: CI/CD report, evidence screenshots, and pipeline documentation
+Clarify CI-only scope; document smoke-pass vs smoke-one-fail sample runs.
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+---
+faca25d0ab35ac225e4c5b5cb202d4860bdd29e4
+minhtrile293 <23127273@student.hcmus.edu.vn>
+2026-08-20 10:54:22 +0700
+ci: refresh Newman HTML reports from local smoke runs
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+---
+d6d18f7e8f32c8e9383de40fd71dd0f5714ebe54
+minhtrile293 <23127273@student.hcmus.edu.vn>
+2026-08-20 10:57:12 +0700
+fix(ci): correct default Newman profile name in profile.txt
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+---

@@ -1,0 +1,403 @@
+newman
+
+HW06_FR06_ProductDetail
+
+❏ 00 Setup
+↳ Setup — Login test user
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/login [200 OK, 635B, 15ms]
+  ✓  Login test user
+
+↳ Setup — Login admin
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/login [200 OK, 640B, 3ms]
+  ✓  Login admin
+
+❏ 01 Domain & Schema
+↳ FR06-TC-001 Valid product odd ID
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 2ms]
+  ✓  Status 200
+  ✓  Has required fields
+  ✓  Price is number for odd id
+
+↳ FR06-TC-002 Valid product even ID
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/2 [200 OK, 345B, 2ms]
+  ✓  Status 200
+  ✓  Price is string for even id (SUT behavior)
+
+↳ FR06-TC-003 Valid last seeded product
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/5 [200 OK, 467B, 2ms]
+  ✓  Status 200
+  ✓  Name contains Keychron
+
+↳ FR06-TC-004 Valid category 2
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/3 [200 OK, 448B, 2ms]
+  ✓  Status 200
+  ✓  category_id is 2
+
+↳ FR06-TC-005 Non-existent ID
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/99999 [200 OK, 267B, 2ms]
+  ✓  Status 200 (SUT bug: should be 404)
+  ✓  Empty object body
+
+↳ FR06-TC-006 ID zero
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/0 [200 OK, 267B, 2ms]
+  ✓  Status 200
+  ✓  Empty object
+
+↳ FR06-TC-007 Negative ID
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/-1 [200 OK, 267B, 3ms]
+  ✓  Status 200
+  ✓  Empty object
+
+↳ FR06-TC-008 Non-numeric ID
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/abc [200 OK, 267B, 2ms]
+  ✓  Status 200
+  ✓  Empty object
+
+↳ FR06-TC-009 Decimal ID
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/1.5 [200 OK, 267B, 1ms]
+  ✓  Status 200
+  ✓  Empty object
+
+↳ FR06-TC-010 Very large ID
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/2147483647 [200 OK, 267B, 1ms]
+  ✓  Status 200
+  ✓  Empty object
+
+↳ FR06-TC-011 Trailing slash list route
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products [200 OK, 1.08kB, 1ms]
+  ✓  Status 200
+  ✓  Response is array (list route)
+
+↳ FR06-TC-012 Leading-zero ID
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/01 [200 OK, 451B, 1ms]
+  ✓  Status 200
+  ✓  Resolves to product id 1
+
+↳ FR06-TC-013 Schema id field
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 2ms]
+  ✓  id === 1
+
+↳ FR06-TC-014 Schema name string
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 2ms]
+  ✓  name is non-empty string
+
+↳ FR06-TC-015 Schema price number odd
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
+  ✓  price is number
+
+↳ FR06-TC-016 Schema description
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
+  ✓  description is string
+
+↳ FR06-TC-017 Schema imageUrl
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
+  ✓  imageUrl starts with http
+
+↳ FR06-TC-018 Schema category_id
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
+  ✓  category_id in 1-3
+
+↳ FR06-TC-019 No extra keys
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
+  ✓  Only expected keys
+
+↳ FR06-TC-020 Missing product schema
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/88888 [200 OK, 267B, 1ms]
+  ✓  Status 200 empty object
+
+❏ 02 Security & HTTP
+↳ FR06-TC-021 No Authorization header
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 2ms]
+  ✓  Public read without auth
+  ✓  Returns product
+
+↳ FR06-TC-022 Invalid Bearer token
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
+  ✓  Still 200 with invalid token
+
+↳ FR06-TC-023 SQLi OR 1=1
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/1'%20OR%20'1'='1 [200 OK, 267B, 1ms]
+  ✓  Status 200
+  ✓  Empty or safe response
+
+↳ FR06-TC-024 SQLi DROP encoded + list intact
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/1%3BDROP%20TABLE%20products-- [200 OK, 267B, 1ms]
+  ✓  SQLi path returns 200 {}
+  GET http://127.0.0.1:3000/api/products [200 OK, 1.08kB, 1ms]
+  ✓  Products list still available
+
+↳ FR06-TC-025 XSS in path
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/%3Cscript%3Ealert(1)%3C/script%3E [404 Not Found, 489B, 1ms]
+  ✓  Status 404 (Express no route match)
+  ✓  No script in body
+
+↳ FR06-TC-026 IDOR with user token
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
+  ✓  Public data with user token
+
+↳ FR06-TC-027 No admin required
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
+  ✓  Public without admin
+
+↳ FR06-TC-028 POST not allowed on detail
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/products/1 [404 Not Found, 458B, 2ms]
+  ✓  POST returns 404
+
+↳ FR06-TC-029 PUT on detail URL
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  PUT http://127.0.0.1:3000/api/products/4 [200 OK, 296B, 2ms]
+  ✓  PUT returns 200 (SUT allows unauthenticated update — bug)
+
+↳ FR06-TC-030 DELETE without auth
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  DELETE http://127.0.0.1:3000/api/products/99998 [200 OK, 296B, 1ms]
+  ✓  DELETE returns 200 (SUT allows unauthenticated delete — bug)
+
+↳ FR06-TC-031 Content-Type JSON
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
+  ✓  Content-Type includes json
+
+↳ FR06-TC-032 Response time SLA
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
+  ✓  Status 200
+  ✓  Response < 2000ms
+
+❏ 03 Performance & Edge
+↳ FR06-TC-033 Idempotent read pass 1
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
+  ✓  Pass 1 status 200
+
+↳ FR06-TC-033 Idempotent read pass 2
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
+  ✓  Pass 2 identical body
+
+↳ FR06-TC-034 Unicode id
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/%E4%B8%AD [200 OK, 267B, 1ms]
+  ✓  Status 200
+  ✓  Empty object
+
+↳ FR06-TC-035 Whitespace id
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/%2001%20 [200 OK, 451B, 1ms]
+  ✓  Status 200
+
+↳ FR06-TC-036 Null byte id
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/1%00 [200 OK, 451B, 1ms]
+  ✓  Status 200
+
+↳ FR06-TC-037 Float string id
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/2.0 [200 OK, 345B, 1ms]
+  ✓  Status 200 — SQLite coerces 2.0 to product 2
+  ✓  Returns product id 2
+
+↳ FR06-TC-038 List then detail integration
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products [200 OK, 1.08kB, 2ms]
+  ✓  List 200
+  ✓  List contains id 1
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
+  ✓  Detail id 1 matches list
+
+↳ FR06-TC-039 CORS preflight OPTIONS
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  OPTIONS http://127.0.0.1:3000/api/products/1 [204 No Content, 285B, 1ms]
+  ✓  OPTIONS 204
+
+❏ 04 Extended
+↳ FR06-TC-040 No rate limiting
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
+  ✓  Single request 200 (no 429 in SUT)
+
+↳ FR06-TC-EXT-001 Price string even id
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/2 [200 OK, 345B, 1ms]
+  ✓  Extended: price typeof string
+
+↳ FR06-TC-EXT-002 Silent not-found
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/77777 [200 OK, 267B, 1ms]
+  ✓  Extended: 200 + {}
+
+↳ FR06-TC-EXT-003 Trailing slash list
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products [200 OK, 1.08kB, 1ms]
+  ✓  Extended: array response
+
+↳ FR06-TC-EXT-004 Leading zero
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/01 [200 OK, 451B, 2ms]
+  ✓  Extended: id resolves to 1
+
+↳ FR06-TC-EXT-005 Invalid bearer public read
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
+  ✓  Extended: 200 with garbage bearer
+
+↳ FR06-TC-EXT-006 Parity id=1 number
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
+  ✓  Extended: odd id price number
+
+↳ FR06-TC-EXT-006 Parity id=2 string
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/2 [200 OK, 345B, 1ms]
+  ✓  Extended: even id price string
+  ✓  Extended: inconsistent types across parity
+
+┌─────────────────────────┬─────────────────┬─────────────────┐
+│                         │        executed │          failed │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│              iterations │               1 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│                requests │              52 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│            test-scripts │              50 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│      prerequest-scripts │              51 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│              assertions │              73 │               0 │
+├─────────────────────────┴─────────────────┴─────────────────┤
+│ total run duration: 666ms                                   │
+├─────────────────────────────────────────────────────────────┤
+│ total data received: 9.47kB (approx)                        │
+├─────────────────────────────────────────────────────────────┤
+│ average response time: 1ms [min: 1ms, max: 15ms, s.d.: 1ms] │
+└─────────────────────────────────────────────────────────────┘

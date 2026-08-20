@@ -1,0 +1,7 @@
+tc_id,product_id,expected_status,expected_price_type,notes
+FR06-TC-001,1,200,number,valid odd id
+FR06-TC-002,2,200,string,valid even id - price string bug
+FR06-TC-005,99999,200,none,empty object not 404
+FR06-TC-008,abc,200,none,non-numeric id
+FR06-TC-EXT-001,2,200,string,extended parity check
+FR06-TC-EXT-002,99999,200,none,extended silent not-found

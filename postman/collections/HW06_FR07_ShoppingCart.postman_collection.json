@@ -1,0 +1,20 @@
+{
+  "info": {
+    "name": "HW06_FR07_ShoppingCart",
+    "description": "FR07 Shopping Cart — Pool B. Pre-request script sets X-Student-Id on every request.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.request.headers.add({ key: 'X-Student-Id', value: pm.environment.get('studentId') || '23127273' });",
+          "console.log('X-Student-Id:', pm.environment.get('studentId') || '23127273');"
+        ]
+      }
+    }
+  ],
+  "item": []
+}

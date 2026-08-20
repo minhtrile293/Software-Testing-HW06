@@ -1,0 +1,5 @@
+# Git commit log — HW06 API Testing
+
+> Export with: `git log --oneline --reverse > docs/git-log/git-commit-log.txt`
+
+_(Populate after each pipeline step: generate, audit, extend, execute per API.)_

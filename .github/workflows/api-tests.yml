@@ -1,0 +1,55 @@
+name: API Tests (HW06)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  newman:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Newman
+        run: npm install -g newman newman-reporter-htmlextra
+
+      # TODO: clone/start EShop SUT before running tests
+      # - name: Start SUT
+      #   run: ...
+
+      - name: Run FR06 collection
+        run: |
+          newman run postman/collections/HW06_FR06_ProductDetail.postman_collection.json \
+            -e postman/environments/HW06_local.postman_environment.json \
+            -d postman/data/fr06-product-detail-data.csv \
+            -r htmlextra \
+            --reporter-htmlextra-export results/newman/fr06-report.html
+
+      - name: Run FR07 collection
+        run: |
+          newman run postman/collections/HW06_FR07_ShoppingCart.postman_collection.json \
+            -e postman/environments/HW06_local.postman_environment.json \
+            -d postman/data/fr07-shopping-cart-data.csv \
+            -r htmlextra \
+            --reporter-htmlextra-export results/newman/fr07-report.html
+
+      - name: Run FR16 collection
+        run: |
+          newman run postman/collections/HW06_FR16_ProductImportCSV.postman_collection.json \
+            -e postman/environments/HW06_local.postman_environment.json \
+            -d postman/data/fr16-product-import-data.csv \
+            -r htmlextra \
+            --reporter-htmlextra-export results/newman/fr16-report.html
+
+      - name: Upload Newman reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: newman-reports
+          path: results/newman/

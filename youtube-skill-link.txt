@@ -1,0 +1,2 @@
+# Paste YouTube demo URL after recording (see agent-skill/demo-outline.md)
+# Example format: https://youtu.be/xxxxxxxxxxx

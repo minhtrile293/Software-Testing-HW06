@@ -1,6 +1,6 @@
 # AI-Driven API Test Generator — Pseudocode
 
-> Self-drawn design for HW06 §7. Diagram: `diagram.png` (add manually).
+> Self-drawn design for HW06 §7. Diagram: `diagram.png` (student layout via `scripts/generate-agent-diagram.py`).
 
 ```
 INPUT: api_specification.md (endpoint, method, params, response schema, SEC rules)

@@ -1,0 +1,521 @@
+newman: could not find "html" reporter
+  ensure that the reporter is installed in the same directory as newman
+  run `npm install newman-reporter-html`
+
+newman
+
+HW06_FR07_ShoppingCart
+
+❏ 00 Setup
+↳ Setup — Login test user
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/login [200 OK, 635B, 16ms]
+  ✓  Login OK
+
+↳ Setup — Register fresh cart user
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/register [200 OK, 316B, 3ms]
+  ✓  Register OK
+  POST http://127.0.0.1:3000/api/login [200 OK, 655B, 2ms]
+
+❏ 01 Auth
+↳ FR07-TC-001 GET cart no token
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/cart [401 Unauthorized, 301B, 2ms]
+  ✓  [SPEC] requires auth 401/403
+
+↳ FR07-TC-002 POST cart no token
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [401 Unauthorized, 301B, 2ms]
+  ✓  [SPEC] requires auth 401/403
+
+↳ FR07-TC-003 GET cart invalid token
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/cart [403 Forbidden, 295B, 2ms]
+  ✓  [SPEC] invalid token 403
+
+↳ FR07-TC-004 POST cart invalid token
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [403 Forbidden, 295B, 2ms]
+  ✓  [SPEC] invalid token 403
+
+❏ 02 GET Cart
+↳ FR07-TC-005 GET empty cart fresh user
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/cart [200 OK, 267B, 1ms]
+  ✓  [SPEC] status 200
+  ✓  [SPEC] empty array
+
+↳ FR07-TC-006 GET cart returns array
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/cart [200 OK, 419B, 3ms]
+  ✓  [SPEC] response is array
+
+↳ FR07-TC-007 GET cart Content-Type json
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/cart [200 OK, 419B, 2ms]
+  ✓  [SPEC] Content-Type json
+
+❏ 03 POST Valid
+↳ FR07-TC-008 POST valid item
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [200 OK, 294B, 2ms]
+  ✓  [SPEC] status 200
+  ✓  [SPEC] message Added to cart
+
+↳ FR07-TC-009 POST quantity 1 boundary
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [200 OK, 294B, 2ms]
+  ✓  [SPEC] status 200
+
+↳ FR07-TC-010 GET cart reflects added item
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/cart [200 OK, 334B, 1ms]
+  ✓  [SPEC] cart has item
+  ✓  [SPEC] item has id,name,price,quantity
+
+❏ 04 POST Invalid
+↳ FR07-TC-011 POST quantity zero
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [200 OK, 294B, 1ms]
+  1. [SPEC] status 400 Bad Request
+
+↳ FR07-TC-012 POST quantity negative
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [200 OK, 294B, 1ms]
+  2. [SPEC] status 400 Bad Request
+
+↳ FR07-TC-013 POST quantity decimal
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [200 OK, 294B, 1ms]
+  3. [SPEC] status 400 Bad Request
+
+↳ FR07-TC-014 POST missing id
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [200 OK, 294B, 1ms]
+  4. [SPEC] status 400 Bad Request
+
+↳ FR07-TC-015 POST missing name
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [200 OK, 294B, 2ms]
+  5. [SPEC] status 400 Bad Request
+
+↳ FR07-TC-016 POST missing price
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [200 OK, 294B, 1ms]
+  6. [SPEC] status 400 Bad Request
+
+↳ FR07-TC-017 POST missing quantity
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [200 OK, 294B, 1ms]
+  7. [SPEC] status 400 Bad Request
+
+↳ FR07-TC-018 POST price zero
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [200 OK, 294B, 1ms]
+  8. [SPEC] status 400 Bad Request
+
+↳ FR07-TC-019 POST price negative
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [200 OK, 294B, 1ms]
+  9. [SPEC] status 400 Bad Request
+
+↳ FR07-TC-020 POST empty body
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [200 OK, 294B, 1ms]
+ 10. [SPEC] status 400 Bad Request
+
+↳ FR07-TC-021 POST name empty string
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [200 OK, 294B, 2ms]
+ 11. [SPEC] status 400 Bad Request
+
+↳ FR07-TC-022 POST quantity string
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [200 OK, 294B, 1ms]
+ 12. [SPEC] status 400 Bad Request
+
+↳ FR07-TC-023 POST price string
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [200 OK, 294B, 2ms]
+ 13. [SPEC] status 400 Bad Request
+
+❏ 05 Schema & Security
+↳ FR07-TC-024 Cart item price is number
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/cart [200 OK, 401B, 2ms]
+  ✓  [SPEC] price number
+
+↳ FR07-TC-025 Cart item quantity is number
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/cart [200 OK, 401B, 1ms]
+  ✓  [SPEC] quantity number
+
+↳ FR07-TC-026 SQLi in product name
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [200 OK, 294B, 2ms]
+ 14. [SPEC] status 400 Bad Request
+
+↳ FR07-TC-027 XSS in name not reflected
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [200 OK, 294B, 1ms]
+  ✓  [SPEC] status 200 or 400
+  ✓  [SPEC] no script in response
+
+❏ 06 Business Logic
+↳ FR07-TC-028 Duplicate product merges quantity
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [200 OK, 294B, 2ms]
+  ✓  [SPEC] first add 200
+
+↳ FR07-TC-028b Duplicate second add merge check
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [200 OK, 294B, 1ms]
+  ✓  [SPEC] second add 200
+
+↳ FR07-TC-028c GET after duplicate single row qty 2
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/cart [200 OK, 534B, 1ms]
+ 15. [SPEC] one row for product id=1
+ 16. [SPEC] merged quantity is 2
+
+↳ FR07-TC-029 Add two different products
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [200 OK, 294B, 2ms]
+  ✓  [SPEC] add product 2
+
+❏ 07 HTTP & Perf
+↳ FR07-TC-030 PUT cart not allowed
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  PUT http://127.0.0.1:3000/api/cart [404 Not Found, 451B, 1ms]
+  ✓  [SPEC] PUT 404 or 405
+
+↳ FR07-TC-031 DELETE cart not allowed
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  DELETE http://127.0.0.1:3000/api/cart [404 Not Found, 454B, 1ms]
+  ✓  [SPEC] DELETE 404 or 405
+
+↳ FR07-TC-032 Response time
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/cart [200 OK, 1.13kB, 1ms]
+  ✓  [SPEC] status 200
+  ✓  [SPEC] < 2000ms
+
+↳ FR07-TC-033 Cart isolated per user
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/cart [200 OK, 1.13kB, 1ms]
+  ✓  [SPEC] test user cart independent
+
+❏ 08 Edge
+↳ FR07-TC-034 POST oversized quantity
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [200 OK, 294B, 2ms]
+ 17. [SPEC] status 400 Bad Request
+
+↳ FR07-TC-035 POST null fields
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [200 OK, 294B, 1ms]
+ 18. [SPEC] status 400 Bad Request
+
+↳ FR07-TC-036 GET after POST schema
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/cart [200 OK, 590B, 1ms]
+  ✓  [SPEC] array of objects
+
+↳ FR07-TC-037 POST id zero
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [200 OK, 294B, 1ms]
+ 19. [SPEC] status 400 Bad Request
+
+↳ FR07-TC-038 POST id negative
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [200 OK, 294B, 2ms]
+ 20. [SPEC] status 400 Bad Request
+
+↳ FR07-TC-039 Rate limit SEC07
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/cart [200 OK, 1.34kB, 1ms]
+ 21. [SPEC] rate limit 429
+
+↳ FR07-TC-040 Array body rejected
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [200 OK, 294B, 2ms]
+ 22. [SPEC] status 400 Bad Request
+
+❏ 09 Extended
+↳ FR07-TC-EXT-001 No validation quantity zero
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [200 OK, 294B, 2ms]
+ 23. [SPEC] status 400 Bad Request
+
+↳ FR07-TC-EXT-002 Duplicate rows not merged
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/cart [200 OK, 656B, 1ms]
+ 24. [SPEC] at most one row per product id
+
+↳ FR07-TC-EXT-003 push raw body unvalidated
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/cart [200 OK, 294B, 1ms]
+ 25. [SPEC] status 400 Bad Request
+
+↳ FR07-TC-EXT-004 Cart persists in memory
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/cart [200 OK, 1.44kB, 2ms]
+  ✓  [SPEC] cart not empty after prior adds
+
+↳ FR07-TC-EXT-005 Missing Authorization case sensitive
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/cart [401 Unauthorized, 301B, 1ms]
+  ✓  [SPEC] requires auth 401/403
+
+↳ FR07-TC-EXT-006 Fresh user cart count after adds
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/cart [200 OK, 656B, 1ms]
+  ✓  [SPEC] fresh user has multiple distinct items
+
+┌─────────────────────────┬─────────────────┬─────────────────┐
+│                         │        executed │          failed │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│              iterations │               1 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│                requests │              51 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│            test-scripts │              50 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│      prerequest-scripts │              54 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│              assertions │              56 │              25 │
+├─────────────────────────┴─────────────────┴─────────────────┤
+│ total run duration: 691ms                                   │
+├─────────────────────────────────────────────────────────────┤
+│ total data received: 7.9kB (approx)                         │
+├─────────────────────────────────────────────────────────────┤
+│ average response time: 1ms [min: 1ms, max: 16ms, s.d.: 2ms] │
+└─────────────────────────────────────────────────────────────┘
+
+   #  failure         detail                                                                         
+                                                                                                     
+ 01.  AssertionError  [SPEC] status 400 Bad Request                                                  
+                      expected response to have status code 400 but got 200                          
+                      at assertion:0 in test-script                                                  
+                      inside "04 POST Invalid / FR07-TC-011 POST quantity zero"                      
+                                                                                                     
+ 02.  AssertionError  [SPEC] status 400 Bad Request                                                  
+                      expected response to have status code 400 but got 200                          
+                      at assertion:0 in test-script                                                  
+                      inside "04 POST Invalid / FR07-TC-012 POST quantity negative"                  
+                                                                                                     
+ 03.  AssertionError  [SPEC] status 400 Bad Request                                                  
+                      expected response to have status code 400 but got 200                          
+                      at assertion:0 in test-script                                                  
+                      inside "04 POST Invalid / FR07-TC-013 POST quantity decimal"                   
+                                                                                                     
+ 04.  AssertionError  [SPEC] status 400 Bad Request                                                  
+                      expected response to have status code 400 but got 200                          
+                      at assertion:0 in test-script                                                  
+                      inside "04 POST Invalid / FR07-TC-014 POST missing id"                         
+                                                                                                     
+ 05.  AssertionError  [SPEC] status 400 Bad Request                                                  
+                      expected response to have status code 400 but got 200                          
+                      at assertion:0 in test-script                                                  
+                      inside "04 POST Invalid / FR07-TC-015 POST missing name"                       
+                                                                                                     
+ 06.  AssertionError  [SPEC] status 400 Bad Request                                                  
+                      expected response to have status code 400 but got 200                          
+                      at assertion:0 in test-script                                                  
+                      inside "04 POST Invalid / FR07-TC-016 POST missing price"                      
+                                                                                                     
+ 07.  AssertionError  [SPEC] status 400 Bad Request                                                  
+                      expected response to have status code 400 but got 200                          
+                      at assertion:0 in test-script                                                  
+                      inside "04 POST Invalid / FR07-TC-017 POST missing quantity"                   
+                                                                                                     
+ 08.  AssertionError  [SPEC] status 400 Bad Request                                                  
+                      expected response to have status code 400 but got 200                          
+                      at assertion:0 in test-script                                                  
+                      inside "04 POST Invalid / FR07-TC-018 POST price zero"                         
+                                                                                                     
+ 09.  AssertionError  [SPEC] status 400 Bad Request                                                  
+                      expected response to have status code 400 but got 200                          
+                      at assertion:0 in test-script                                                  
+                      inside "04 POST Invalid / FR07-TC-019 POST price negative"                     
+                                                                                                     
+ 10.  AssertionError  [SPEC] status 400 Bad Request                                                  
+                      expected response to have status code 400 but got 200                          
+                      at assertion:0 in test-script                                                  
+                      inside "04 POST Invalid / FR07-TC-020 POST empty body"                         
+                                                                                                     
+ 11.  AssertionError  [SPEC] status 400 Bad Request                                                  
+                      expected response to have status code 400 but got 200                          
+                      at assertion:0 in test-script                                                  
+                      inside "04 POST Invalid / FR07-TC-021 POST name empty string"                  
+                                                                                                     
+ 12.  AssertionError  [SPEC] status 400 Bad Request                                                  
+                      expected response to have status code 400 but got 200                          
+                      at assertion:0 in test-script                                                  
+                      inside "04 POST Invalid / FR07-TC-022 POST quantity string"                    
+                                                                                                     
+ 13.  AssertionError  [SPEC] status 400 Bad Request                                                  
+                      expected response to have status code 400 but got 200                          
+                      at assertion:0 in test-script                                                  
+                      inside "04 POST Invalid / FR07-TC-023 POST price string"                       
+                                                                                                     
+ 14.  AssertionError  [SPEC] status 400 Bad Request                                                  
+                      expected response to have status code 400 but got 200                          
+                      at assertion:0 in test-script                                                  
+                      inside "05 Schema & Security / FR07-TC-026 SQLi in product name"               
+                                                                                                     
+ 15.  AssertionError  [SPEC] one row for product id=1                                                
+                      expected 4 to deeply equal 1                                                   
+                      at assertion:0 in test-script                                                  
+                      inside "06 Business Logic / FR07-TC-028c GET after duplicate single row qty 2" 
+                                                                                                     
+ 16.  AssertionError  [SPEC] merged quantity is 2                                                    
+                      expected 1 to deeply equal 2                                                   
+                      at assertion:1 in test-script                                                  
+                      inside "06 Business Logic / FR07-TC-028c GET after duplicate single row qty 2" 
+                                                                                                     
+ 17.  AssertionError  [SPEC] status 400 Bad Request                                                  
+                      expected response to have status code 400 but got 200                          
+                      at assertion:0 in test-script                                                  
+                      inside "08 Edge / FR07-TC-034 POST oversized quantity"                         
+                                                                                                     
+ 18.  AssertionError  [SPEC] status 400 Bad Request                                                  
+                      expected response to have status code 400 but got 200                          
+                      at assertion:0 in test-script                                                  
+                      inside "08 Edge / FR07-TC-035 POST null fields"                                
+                                                                                                     
+ 19.  AssertionError  [SPEC] status 400 Bad Request                                                  
+                      expected response to have status code 400 but got 200                          
+                      at assertion:0 in test-script                                                  
+                      inside "08 Edge / FR07-TC-037 POST id zero"                                    
+                                                                                                     
+ 20.  AssertionError  [SPEC] status 400 Bad Request                                                  
+                      expected response to have status code 400 but got 200                          
+                      at assertion:0 in test-script                                                  
+                      inside "08 Edge / FR07-TC-038 POST id negative"                                
+                                                                                                     
+ 21.  AssertionError  [SPEC] rate limit 429                                                          
+                      expected response to have status code 429 but got 200                          
+                      at assertion:0 in test-script                                                  
+                      inside "08 Edge / FR07-TC-039 Rate limit SEC07"                                
+                                                                                                     
+ 22.  AssertionError  [SPEC] status 400 Bad Request                                                  
+                      expected response to have status code 400 but got 200                          
+                      at assertion:0 in test-script                                                  
+                      inside "08 Edge / FR07-TC-040 Array body rejected"                             
+                                                                                                     
+ 23.  AssertionError  [SPEC] status 400 Bad Request                                                  
+                      expected response to have status code 400 but got 200                          
+                      at assertion:0 in test-script                                                  
+                      inside "09 Extended / FR07-TC-EXT-001 No validation quantity zero"             
+                                                                                                     
+ 24.  AssertionError  [SPEC] at most one row per product id                                          
+                      expected 5 to be at most 1                                                     
+                      at assertion:0 in test-script                                                  
+                      inside "09 Extended / FR07-TC-EXT-002 Duplicate rows not merged"               
+                                                                                                     
+ 25.  AssertionError  [SPEC] status 400 Bad Request                                                  
+                      expected response to have status code 400 but got 200                          
+                      at assertion:0 in test-script                                                  
+                      inside "09 Extended / FR07-TC-EXT-003 push raw body unvalidated"               

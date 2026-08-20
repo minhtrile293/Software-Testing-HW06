@@ -1,1 +1,1 @@
-smoke-pass
+ci-smoke-pass

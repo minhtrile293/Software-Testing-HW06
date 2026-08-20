@@ -108,98 +108,90 @@ _AI-generated (Cursor) in 4 guided steps: (1) domain partitions on `:id`, (2) sc
 
 ### 2.2. Audit (VALID / INVALID / INCOMPLETE)
 
-_Human review against smoke-tested SUT (`server.js` L159–165). Public read endpoint; no auth middleware._
+_Audit fixes **test design only** — never change expected results to match SUT bugs. Expected values stay per **API spec / REST**. Newman **FAIL** = SUT defect._
 
-| TC ID | Label | Reasoning | Corrected? |
+| TC ID | Label | Reasoning | Action |
 |---|---|---|---|
-| FR06-TC-001 | VALID | Matches SUT: 200 + full product, price number for odd id | — |
-| FR06-TC-002 | INVALID | AI assumed price always number; SUT returns **string** for even ids | Yes → expect string price |
-| FR06-TC-003 | VALID | id=5 exists in seed data | — |
-| FR06-TC-004 | VALID | id=3, category_id=2 | — |
-| FR06-TC-005 | INVALID | AI expected 404; SUT returns **200 `{}`** | Yes → 200 empty object |
-| FR06-TC-006 | INVALID | SUT returns 200 `{}`, not 404 | Yes |
-| FR06-TC-007 | INVALID | SUT returns 200 `{}`, not 400 | Yes |
-| FR06-TC-008 | INVALID | SUT returns 200 `{}`, not 400 | Yes |
-| FR06-TC-009 | INVALID | SUT returns 200 `{}`, not 400 | Yes |
-| FR06-TC-010 | INVALID | SUT returns 200 `{}`, not 404 | Yes |
-| FR06-TC-011 | INCOMPLETE | `/api/products/` hits **list** route → 200 array, not 404 | Yes → 200 array all products |
-| FR06-TC-012 | INVALID | SUT treats `01` as id=1 → 200 product | Yes → 200 id=1 |
-| FR06-TC-013 | VALID | | — |
-| FR06-TC-014 | VALID | | — |
-| FR06-TC-015 | INCOMPLETE | True only for **odd** ids; even ids differ | Yes → split odd/even |
-| FR06-TC-016 | VALID | | — |
-| FR06-TC-017 | VALID | imageUrl may be empty for imported products | — |
-| FR06-TC-018 | VALID | | — |
-| FR06-TC-019 | VALID | | — |
-| FR06-TC-020 | INVALID | Missing → 200 `{}`, not 404 error JSON | Yes |
-| FR06-TC-021 | INVALID | Public endpoint; no auth required | Yes → 200 without token |
-| FR06-TC-022 | INVALID | Invalid token ignored; still 200 | Yes → 200 |
-| FR06-TC-023 | INCOMPLETE | Parameterized query; returns 200 `{}` not 400 | Yes → 200 `{}`, list intact |
-| FR06-TC-024 | INCOMPLETE | Returns 200 `{}`; need verify list endpoint post-test | Yes → 200 `{}` + list check |
-| FR06-TC-025 | INCOMPLETE | Returns 200 `{}`; no XSS reflected | Yes → 200 `{}` |
-| FR06-TC-026 | INVALID | No per-user scope on product read — IDOR N/A | Yes → 200 public data |
-| FR06-TC-027 | INVALID | Detail is public; admin not required | Yes → 200 without admin |
-| FR06-TC-028 | VALID | POST returns 404 on this SUT | — |
-| FR06-TC-029 | VALID | PUT returns 404 | — |
-| FR06-TC-030 | INVALID | DELETE returns 404, not 403 | Yes → 404 |
-| FR06-TC-031 | VALID | | — |
-| FR06-TC-032 | VALID | Smoke test < 50 ms | — |
-| FR06-TC-033 | VALID | | — |
-| FR06-TC-034 | INVALID | SUT returns 200 `{}` | Yes |
-| FR06-TC-035 | INVALID | SUT returns 200 `{}` | Yes |
-| FR06-TC-036 | INCOMPLETE | Behavior untested; likely 200 `{}` | Yes → 200 `{}` |
-| FR06-TC-037 | INVALID | `2.0` → 200 `{}` in smoke test | Yes |
-| FR06-TC-038 | VALID | | — |
-| FR06-TC-039 | INCOMPLETE | CORS enabled globally; OPTIONS may return 404 on Express 5 | Defer to execute |
-| FR06-TC-040 | INVALID | No rate limiting in SUT | Yes → all 200 |
+| FR06-TC-001 | VALID | Correct positive test | Keep — expect 200 + schema |
+| FR06-TC-002 | VALID | Spec: price is number for all products | Keep — expect number (fail on SUT = BUG-002) |
+| FR06-TC-003 | VALID | | Keep |
+| FR06-TC-004 | VALID | | Keep |
+| FR06-TC-005 | VALID | AI draft correct: 404 for missing id | Keep — SUT returns 200 `{}` → **FAIL** |
+| FR06-TC-006 | VALID | 404 for id=0 | Keep |
+| FR06-TC-007 | VALID | 400 for negative id | Keep |
+| FR06-TC-008 | VALID | 400 for non-numeric id | Keep |
+| FR06-TC-009 | VALID | 400 for decimal id | Keep |
+| FR06-TC-010 | VALID | 404 for non-existent large id | Keep |
+| FR06-TC-011 | VALID | Detail route must not return list array | Keep — **FAIL** → BUG-005 |
+| FR06-TC-012 | VALID | 400 for leading-zero malformed id | Keep |
+| FR06-TC-013 – 019 | VALID | Schema tests on valid product | Keep |
+| FR06-TC-020 | VALID | Duplicate missing-id 404 check | Keep |
+| FR06-TC-021 | **INVALID** | AI expected 401 on **public** read endpoint | **Rewritten** → expect 200 (public catalog) |
+| FR06-TC-022 | **INVALID** | AI expected 401 for invalid token on public API | **Rewritten** → expect 200 |
+| FR06-TC-023 | VALID | Must reject SQLi (400/404) | Keep — SUT returns 200 `{}` → **FAIL** |
+| FR06-TC-024 | VALID | SQLi rejected + DB intact | Keep |
+| FR06-TC-025 | VALID | XSS path 400/404 | Keep — passes (404) |
+| FR06-TC-026 | **INVALID** | IDOR N/A — public catalog | **Rewritten** → user token can read |
+| FR06-TC-027 | **INVALID** | Admin not required for public read | **Rewritten** → expect 200 |
+| FR06-TC-028 | VALID | POST on /:id → 404/405 | Keep |
+| FR06-TC-029 | **INCOMPLETE** | AI expected 405; spec §3.3 requires **admin auth** on PUT | **Rewritten** → expect 401/403 without token |
+| FR06-TC-030 | **INCOMPLETE** | AI expected 403 with user token; spec requires auth on DELETE | **Rewritten** → expect 401/403 without token |
+| FR06-TC-031 – 033 | VALID | | Keep |
+| FR06-TC-034 – 037 | VALID | Malformed ids → 400/404 per REST | Keep — most **FAIL** (SUT returns 200) |
+| FR06-TC-038 – 039 | VALID | Integration + CORS | Keep |
+| FR06-TC-040 | VALID | SEC07 rate limit → 429 | Keep — **FAIL** (no rate limit in SUT) |
 
-**Audit summary:** VALID 14 · INVALID 19 · INCOMPLETE 7 → all INVALID/INCOMPLETE rows corrected before execution (Phase 2).
+**Audit summary:** VALID 32 · INVALID 4 (rewritten) · INCOMPLETE 2 (rewritten) · **Expected values never lowered to match SUT.**
 
 ### 2.3. Extend (≥ 5 manual test cases)
 
-_Cases derived from reading `server.js` after AI generation — not inferable from spec alone._
+_Spec-based expectations. Failures during execute confirm bugs._
 
-| TC ID | Description | Method | Endpoint | Input | Expected (corrected) | Why AI missed it |
-|---|---|---|---|---|---|---|
-| FR06-TC-EXT-001 | **Price type parity bug** — even ID returns string price | GET | `/api/products/2` | id=2 | 200; `typeof price === "string"` | AI assumes schema-stable number; SUT has `if (row.id % 2 === 0) row.price = row.price.toString()` |
-| FR06-TC-EXT-002 | **Silent not-found** — missing ID returns 200 `{}` | GET | `/api/products/99999` | missing | 200 status + empty JSON object (spec implies error) | AI defaults to REST 404; must read handler `if (!row) return res.status(200).json({})` |
-| FR06-TC-EXT-003 | Trailing slash routes to **product list**, not detail | GET | `/api/products/` | trailing `/` | 200 JSON **array** of all products | AI treats as malformed detail ID; Express matches list route |
-| FR06-TC-EXT-004 | Leading-zero ID `01` resolves to product 1 | GET | `/api/products/01` | id=01 | 200; body.id === 1 | SQLite type coercion; not in spec |
-| FR06-TC-EXT-005 | Invalid Bearer does **not** block public read | GET | `/api/products/1` | `Authorization: Bearer garbage` | 200 full product (same as no header) | AI over-applies SEC03 auth rules to all endpoints |
-| FR06-TC-EXT-006 | Strict JSON schema fails across parity | GET | `/api/products/1` then `/api/products/2` | odd then even | id=1 price number; id=2 price string — same endpoint, inconsistent type | Requires code inspection; schema validation tests must be parity-aware |
+| TC ID | Description | Method | Endpoint | Expected (spec) | Why AI missed it |
+|---|---|---|---|---|---|
+| FR06-TC-EXT-001 | Even ID price must be number | GET | `/api/products/2` | 200; `typeof price === "number"` | AI did not inspect parity code in `server.js` |
+| FR06-TC-EXT-002 | Missing ID must 404 | GET | `/api/products/77777` | 404 | AI assumed REST 404; same as TC-005 |
+| FR06-TC-EXT-003 | Trailing slash must not return list | GET | `/api/products/` | Response is **not** an array | Routing ambiguity |
+| FR06-TC-EXT-004 | Leading-zero ID rejected | GET | `/api/products/01` | 400 Bad Request | SQLite coercion not in spec |
+| FR06-TC-EXT-005 | Public read with garbage Bearer | GET | `/api/products/1` | 200 (public endpoint) | AI over-applied SEC03 |
+| FR06-TC-EXT-006 | Consistent price type across ids | GET | `/api/products/1` + `/2` | Both `price` number | Requires code/schema analysis |
 
 ### 2.4. Execute
 
-- **Collection:** `postman/collections/HW06_FR06_ProductDetail.postman_collection.json` (built via `scripts/build-fr06-collection.js`)
+- **Collection:** `postman/collections/HW06_FR06_ProductDetail.postman_collection.json` (`scripts/build-fr06-collection.js`)
 - **Newman report:** `results/newman/fr06-report.html`
-- **Console log:** `results/newman/fr06-console.txt` (shows `X-Student-Id: 23127273` on every request)
-- **Environment:** `postman/environments/HW06_local.postman_environment.json`
-- **SUT:** `http://127.0.0.1:3000` (`Bản sao eshop-sut-main/backend`, restarted before run)
-- **Run date:** 2026-08-20
+- **Console log:** `results/newman/fr06-console.txt`
+- **Approach:** Assertions prefixed `[SPEC]` — **fail = SUT bug**
+- **Run date:** 2026-08-20 (re-run after methodology fix)
 
 | Metric | Value |
 |---|---:|
-| Test cases (TC IDs) | 46 (40 generated + 6 extended) |
-| Collection requests | 50 (48 tests + 2 setup login) |
-| HTTP requests (incl. chained) | 52 |
-| Assertions | 73 |
-| Passed | 73 |
-| Failed | 0 |
-| Avg response time | 1 ms |
+| Test case requests | 48 (+ 2 setup) |
+| Assertions | 65 |
+| **Passed** | **41** |
+| **Failed** | **24** |
+| Avg response time | ~1 ms |
 
-**Postman features used (FR06):** Collections, Environments, Variables (`{{baseUrl}}`, `{{authToken}}`), Collection-level pre-request script (`X-Student-Id`), per-request Tests/assertions, chained `pm.sendRequest` (TC-024, TC-038), Newman CLI + htmlextra HTML report.
+**Failed tests → bugs:** Newman failures directly drive bug report (§2.5). Multiple failures may share one root cause (e.g. TC-005/006/010/020/EXT-002 all expose BUG-001).
 
-**Execution notes:** TC-025 XSS path returns **404** (Express route mismatch, not 200 `{}`). TC-037 `2.0` coerces to product id=2 in SQLite (corrected at execute time).
+| Failing TC (sample) | Newman result | Bug |
+|---|---|---|
+| TC-005, TC-020, EXT-002 | expected 404, got 200 | BUG-001 |
+| TC-002, EXT-001, EXT-006 | price expected number, got string | BUG-002 |
+| TC-029 | expected 401/403, got 200 | BUG-003 |
+| TC-030 | expected 401/403, got 200 | BUG-004 |
+| TC-011, EXT-003 | expected object, got array | BUG-005 |
+| TC-040 | expected 429, got 200 | Missing SEC07 rate limit |
 
-### 2.5. Bugs Found
+### 2.5. Bugs Found (from Newman failures)
 
-| Bug ID | Title | Severity | Evidence | GitHub Issue |
+| Bug ID | Title | Severity | Failing tests | GitHub Issue |
 |---|---|---|---|---|
-| FR06-BUG-001 | Missing product returns **200 `{}`** instead of 404 | Medium | TC-005, TC-EXT-002; `server.js` L161 | [#1](https://github.com/minhtrile293/Software-Testing-HW06/issues/1) |
-| FR06-BUG-002 | **`price` type inconsistent** — number for odd id, string for even id | Medium | TC-002, TC-EXT-001/006; L162 | [#2](https://github.com/minhtrile293/Software-Testing-HW06/issues/2) |
-| FR06-BUG-003 | **Unauthenticated PUT** `/api/products/:id` succeeds | High | TC-029; L179–188 | [#3](https://github.com/minhtrile293/Software-Testing-HW06/issues/3) |
-| FR06-BUG-004 | **Unauthenticated DELETE** `/api/products/:id` succeeds | High | TC-030; L191–196 | [#4](https://github.com/minhtrile293/Software-Testing-HW06/issues/4) |
-| FR06-BUG-005 | `GET /api/products/` returns **product list** (array), not detail 404 | Low | TC-011, TC-EXT-003 | [#5](https://github.com/minhtrile293/Software-Testing-HW06/issues/5) |
+| FR06-BUG-001 | Missing/invalid id returns **200 `{}`** instead of 404/400 | Medium | TC-005,006,010,020,023,024,034–037, EXT-002 | [#1](https://github.com/minhtrile293/Software-Testing-HW06/issues/1) |
+| FR06-BUG-002 | **`price` type inconsistent** (even id → string) | Medium | TC-002, EXT-001, EXT-006 | [#2](https://github.com/minhtrile293/Software-Testing-HW06/issues/2) |
+| FR06-BUG-003 | **Unauthenticated PUT** `/api/products/:id` | High | TC-029 | [#3](https://github.com/minhtrile293/Software-Testing-HW06/issues/3) |
+| FR06-BUG-004 | **Unauthenticated DELETE** `/api/products/:id` | High | TC-030 | [#4](https://github.com/minhtrile293/Software-Testing-HW06/issues/4) |
+| FR06-BUG-005 | `GET /api/products/` returns **list array** | Low | TC-011, EXT-003 | [#5](https://github.com/minhtrile293/Software-Testing-HW06/issues/5) |
 
 ---
 
@@ -312,9 +304,9 @@ See `ci-cd/CI_CD_Report.md` for pipeline configuration, screenshots, and links t
 | Generated | 40 | | | 40 |
 | Audited (VALID) | 14 | | | 14 |
 | Extended | 6 | | | 6 |
-| Executed | 46 | | | 46 |
-| Passed | 46 | | | 46 |
-| Failed | 0 | | | 0 |
-| Bugs | 5 | | | 5 |
+| Executed | 48 | | | 48 |
+| Passed (assertions) | 41 | | | 41 |
+| Failed (assertions) | 24 | | | 24 |
+| Bugs (from failures) | 5 | | | 5 |
 
 Excel version: `main-report/test-summary.xlsx`

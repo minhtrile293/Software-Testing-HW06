@@ -25,9 +25,9 @@ This repository contains the Postman + Newman API testing project for HW06. Thre
 | Test cases generated (AI) | 40 | | | 40 |
 | Test cases audited (VALID / INVALID / INCOMPLETE) | 14 / 19 / 7 | | | |
 | Test cases extended (manual) | 6 | | | 6 |
-| Test cases executed | 46 | | | 46 |
-| Passed | 46 | | | 46 |
-| Failed | 0 | | | 0 |
+| Test cases executed | 48 | | | 48 |
+| Passed (assertions) | 41 | | | 41 |
+| Failed (assertions) | 24 | | | 24 |
 | Bugs found | 5 | | | 5 |
 
 - **Tool:** Postman + Newman 6.2.2

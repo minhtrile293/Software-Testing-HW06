@@ -1,12 +1,14 @@
 # Bug Report — HW06 API Testing
 
-| Bug ID | API | Title | Expected | Actual | GitHub Issue | Severity |
-|---|---|---|---|---|---|---|
-| FR06-BUG-001 | FR06 | Missing product returns 200 `{}` | 404 Not Found | 200 + empty JSON object | [#1](https://github.com/minhtrile293/Software-Testing-HW06/issues/1) | Medium |
-| FR06-BUG-002 | FR06 | Inconsistent `price` type by id parity | `price` always number | Odd id: number; even id: string | [#2](https://github.com/minhtrile293/Software-Testing-HW06/issues/2) | Medium |
-| FR06-BUG-003 | FR06 | Unauthenticated product update | 401/403 | PUT `/api/products/:id` → 200 | [#3](https://github.com/minhtrile293/Software-Testing-HW06/issues/3) | High |
-| FR06-BUG-004 | FR06 | Unauthenticated product delete | 401/403 | DELETE `/api/products/:id` → 200 | [#4](https://github.com/minhtrile293/Software-Testing-HW06/issues/4) | High |
-| FR06-BUG-005 | FR06 | Trailing slash routing | Detail 404 or single product | `GET /api/products/` → array (list) | [#5](https://github.com/minhtrile293/Software-Testing-HW06/issues/5) | Low |
+> Bugs are identified by **Newman test failures** against **spec-based assertions** (`[SPEC]` prefix in collection).
+
+| Bug ID | API | Title | Expected | Actual | Failing tests | GitHub Issue | Severity |
+|---|---|---|---|---|---|---|---|
+| FR06-BUG-001 | FR06 | Missing/invalid id returns 200 `{}` | 404 or 400 | 200 + `{}` | TC-005,006,010,020,023,024,034–037, EXT-002 | [#1](https://github.com/minhtrile293/Software-Testing-HW06/issues/1) | Medium |
+| FR06-BUG-002 | FR06 | `price` not always number | number | string on even id | TC-002, EXT-001, EXT-006 | [#2](https://github.com/minhtrile293/Software-Testing-HW06/issues/2) | Medium |
+| FR06-BUG-003 | FR06 | PUT without auth | 401/403 | 200 | TC-029 | [#3](https://github.com/minhtrile293/Software-Testing-HW06/issues/3) | High |
+| FR06-BUG-004 | FR06 | DELETE without auth | 401/403 | 200 | TC-030 | [#4](https://github.com/minhtrile293/Software-Testing-HW06/issues/4) | High |
+| FR06-BUG-005 | FR06 | Trailing slash returns list | single object | JSON array | TC-011, EXT-003 | [#5](https://github.com/minhtrile293/Software-Testing-HW06/issues/5) | Low |
 
 ## Screenshots
 
@@ -20,15 +22,16 @@
 
 ## Automation
 
-After identifying bugs from Newman/API runs:
-
 ```bash
-python3 scripts/capture-fr06-bug-screenshots.py   # refresh evidence SVG
-bash scripts/open-fr06-github-issues.sh          # create issues (idempotent: skip if already open)
+node scripts/build-fr06-collection.js
+newman run postman/collections/HW06_FR06_ProductDetail.postman_collection.json \
+  -e postman/environments/HW06_local.postman_environment.json \
+  -r cli,htmlextra --reporter-htmlextra-export results/newman/fr06-report.html
+python3 scripts/capture-fr06-bug-screenshots.py
+bash scripts/open-fr06-github-issues.sh   # first time only
 ```
 
 ## Evidence
 
-- Newman reports: `results/newman/fr06-report.html`
-- Postman collection: `postman/collections/HW06_FR06_ProductDetail.postman_collection.json`
-- Source: `eshop-sut-main/backend/server.js` L159–165 (detail), L179–196 (PUT/DELETE)
+- Newman: `results/newman/fr06-report.html` — **24 failed assertions**
+- Console: `results/newman/fr06-console.txt`

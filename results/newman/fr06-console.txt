@@ -7,7 +7,7 @@ HW06_FR06_ProductDetail
   ┌
   │ 'X-Student-Id:', '23127273'
   └
-  POST http://127.0.0.1:3000/api/login [200 OK, 635B, 15ms]
+  POST http://127.0.0.1:3000/api/login [200 OK, 635B, 25ms]
   ✓  Login test user
 
 ↳ Setup — Login admin
@@ -23,364 +23,356 @@ HW06_FR06_ProductDetail
   │ 'X-Student-Id:', '23127273'
   └
   GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 2ms]
-  ✓  Status 200
-  ✓  Has required fields
-  ✓  Price is number for odd id
+  ✓  [SPEC] status 200
+  ✓  [SPEC] required fields present
+  ✓  [SPEC] price is number
 
 ↳ FR06-TC-002 Valid product even ID
   ┌
   │ 'X-Student-Id:', '23127273'
   └
-  GET http://127.0.0.1:3000/api/products/2 [200 OK, 345B, 2ms]
-  ✓  Status 200
-  ✓  Price is string for even id (SUT behavior)
+  GET http://127.0.0.1:3000/api/products/2 [200 OK, 480B, 2ms]
+  ✓  [SPEC] status 200
+  ✓  [SPEC] full product object
+  1. [SPEC] price is number
 
 ↳ FR06-TC-003 Valid last seeded product
   ┌
   │ 'X-Student-Id:', '23127273'
   └
   GET http://127.0.0.1:3000/api/products/5 [200 OK, 467B, 2ms]
-  ✓  Status 200
-  ✓  Name contains Keychron
+  ✓  [SPEC] status 200
+  ✓  [SPEC] name contains Keychron
 
 ↳ FR06-TC-004 Valid category 2
   ┌
   │ 'X-Student-Id:', '23127273'
   └
   GET http://127.0.0.1:3000/api/products/3 [200 OK, 448B, 2ms]
-  ✓  Status 200
-  ✓  category_id is 2
+  ✓  [SPEC] status 200
+  ✓  [SPEC] category_id is 2
 
 ↳ FR06-TC-005 Non-existent ID
   ┌
   │ 'X-Student-Id:', '23127273'
   └
   GET http://127.0.0.1:3000/api/products/99999 [200 OK, 267B, 2ms]
-  ✓  Status 200 (SUT bug: should be 404)
-  ✓  Empty object body
+  2. [SPEC] status 404 Not Found
 
 ↳ FR06-TC-006 ID zero
   ┌
   │ 'X-Student-Id:', '23127273'
   └
   GET http://127.0.0.1:3000/api/products/0 [200 OK, 267B, 2ms]
-  ✓  Status 200
-  ✓  Empty object
+  3. [SPEC] status 404 Not Found
 
 ↳ FR06-TC-007 Negative ID
   ┌
   │ 'X-Student-Id:', '23127273'
   └
-  GET http://127.0.0.1:3000/api/products/-1 [200 OK, 267B, 3ms]
-  ✓  Status 200
-  ✓  Empty object
+  GET http://127.0.0.1:3000/api/products/-1 [200 OK, 267B, 4ms]
+  4. [SPEC] status 400 Bad Request
 
 ↳ FR06-TC-008 Non-numeric ID
   ┌
   │ 'X-Student-Id:', '23127273'
   └
-  GET http://127.0.0.1:3000/api/products/abc [200 OK, 267B, 2ms]
-  ✓  Status 200
-  ✓  Empty object
+  GET http://127.0.0.1:3000/api/products/abc [200 OK, 267B, 1ms]
+  5. [SPEC] status 400 Bad Request
 
 ↳ FR06-TC-009 Decimal ID
   ┌
   │ 'X-Student-Id:', '23127273'
   └
   GET http://127.0.0.1:3000/api/products/1.5 [200 OK, 267B, 1ms]
-  ✓  Status 200
-  ✓  Empty object
+  6. [SPEC] status 400 Bad Request
 
-↳ FR06-TC-010 Very large ID
+↳ FR06-TC-010 Very large non-existent ID
   ┌
   │ 'X-Student-Id:', '23127273'
   └
   GET http://127.0.0.1:3000/api/products/2147483647 [200 OK, 267B, 1ms]
-  ✓  Status 200
-  ✓  Empty object
+  7. [SPEC] status 404 Not Found
 
-↳ FR06-TC-011 Trailing slash list route
+↳ FR06-TC-011 Empty ID segment (detail)
   ┌
   │ 'X-Student-Id:', '23127273'
   └
-  GET http://127.0.0.1:3000/api/products [200 OK, 1.08kB, 1ms]
-  ✓  Status 200
-  ✓  Response is array (list route)
+  GET http://127.0.0.1:3000/api/products [200 OK, 1.24kB, 2ms]
+  8. [SPEC] detail endpoint returns single object, not list
 
-↳ FR06-TC-012 Leading-zero ID
+↳ FR06-TC-012 Leading-zero ID invalid format
   ┌
   │ 'X-Student-Id:', '23127273'
   └
-  GET http://127.0.0.1:3000/api/products/01 [200 OK, 451B, 1ms]
-  ✓  Status 200
-  ✓  Resolves to product id 1
+  GET http://127.0.0.1:3000/api/products/01 [200 OK, 451B, 2ms]
+  9. [SPEC] status 400 Bad Request
 
 ↳ FR06-TC-013 Schema id field
   ┌
   │ 'X-Student-Id:', '23127273'
   └
-  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 2ms]
-  ✓  id === 1
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
+  ✓  [SPEC] id === 1
 
 ↳ FR06-TC-014 Schema name string
   ┌
   │ 'X-Student-Id:', '23127273'
   └
-  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 2ms]
-  ✓  name is non-empty string
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
+  ✓  [SPEC] name non-empty string
 
-↳ FR06-TC-015 Schema price number odd
+↳ FR06-TC-015 Schema price number
   ┌
   │ 'X-Student-Id:', '23127273'
   └
   GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
-  ✓  price is number
+  ✓  [SPEC] price is number
 
 ↳ FR06-TC-016 Schema description
   ┌
   │ 'X-Student-Id:', '23127273'
   └
-  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
-  ✓  description is string
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 2ms]
+  ✓  [SPEC] description is string
 
 ↳ FR06-TC-017 Schema imageUrl
   ┌
   │ 'X-Student-Id:', '23127273'
   └
   GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
-  ✓  imageUrl starts with http
+  ✓  [SPEC] imageUrl is URL string
 
 ↳ FR06-TC-018 Schema category_id
   ┌
   │ 'X-Student-Id:', '23127273'
   └
   GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
-  ✓  category_id in 1-3
+  ✓  [SPEC] category_id integer 1-3
 
-↳ FR06-TC-019 No extra keys
+↳ FR06-TC-019 No extra top-level keys
   ┌
   │ 'X-Student-Id:', '23127273'
   └
   GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
-  ✓  Only expected keys
+  ✓  [SPEC] only expected keys
 
-↳ FR06-TC-020 Missing product schema
+↳ FR06-TC-020 Missing product error response
   ┌
   │ 'X-Student-Id:', '23127273'
   └
   GET http://127.0.0.1:3000/api/products/88888 [200 OK, 267B, 1ms]
-  ✓  Status 200 empty object
+ 10. [SPEC] status 404 Not Found
 
 ❏ 02 Security & HTTP
-↳ FR06-TC-021 No Authorization header
-  ┌
-  │ 'X-Student-Id:', '23127273'
-  └
-  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 2ms]
-  ✓  Public read without auth
-  ✓  Returns product
-
-↳ FR06-TC-022 Invalid Bearer token
+↳ FR06-TC-021 Public read without Authorization
   ┌
   │ 'X-Student-Id:', '23127273'
   └
   GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
-  ✓  Still 200 with invalid token
+  ✓  [SPEC] public read status 200
+  ✓  [SPEC] returns product
 
-↳ FR06-TC-023 SQLi OR 1=1
+↳ FR06-TC-022 Invalid Bearer on public read
   ┌
   │ 'X-Student-Id:', '23127273'
   └
-  GET http://127.0.0.1:3000/api/products/1'%20OR%20'1'='1 [200 OK, 267B, 1ms]
-  ✓  Status 200
-  ✓  Empty or safe response
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
+  ✓  [SPEC] public read still 200
+  ✓  [SPEC] returns product
 
-↳ FR06-TC-024 SQLi DROP encoded + list intact
+↳ FR06-TC-023 SQLi OR 1=1 rejected
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/1'%20OR%20'1'='1 [200 OK, 267B, 2ms]
+ 11. [SPEC] rejects malformed/suspicious id (400 or 404)
+
+↳ FR06-TC-024 SQLi DROP rejected + DB intact
   ┌
   │ 'X-Student-Id:', '23127273'
   └
   GET http://127.0.0.1:3000/api/products/1%3BDROP%20TABLE%20products-- [200 OK, 267B, 1ms]
-  ✓  SQLi path returns 200 {}
-  GET http://127.0.0.1:3000/api/products [200 OK, 1.08kB, 1ms]
-  ✓  Products list still available
+ 12. [SPEC] rejects SQLi path (400 or 404)
+  GET http://127.0.0.1:3000/api/products [200 OK, 1.24kB, 1ms]
+  ✓  [SPEC] products table intact
 
-↳ FR06-TC-025 XSS in path
+↳ FR06-TC-025 XSS path rejected
   ┌
   │ 'X-Student-Id:', '23127273'
   └
-  GET http://127.0.0.1:3000/api/products/%3Cscript%3Ealert(1)%3C/script%3E [404 Not Found, 489B, 1ms]
-  ✓  Status 404 (Express no route match)
-  ✓  No script in body
+  GET http://127.0.0.1:3000/api/products/%3Cscript%3Ealert(1)%3C/script%3E [404 Not Found, 489B, 2ms]
+  ✓  [SPEC] rejects XSS path (400 or 404)
+  ✓  [SPEC] no script reflected
 
-↳ FR06-TC-026 IDOR with user token
-  ┌
-  │ 'X-Student-Id:', '23127273'
-  └
-  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
-  ✓  Public data with user token
-
-↳ FR06-TC-027 No admin required
+↳ FR06-TC-026 Public catalog with user token
   ┌
   │ 'X-Student-Id:', '23127273'
   └
   GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
-  ✓  Public without admin
+  ✓  [SPEC] authenticated user can read public catalog
+  ✓  [SPEC] returns product data
 
-↳ FR06-TC-028 POST not allowed on detail
+↳ FR06-TC-027 Public read without admin role
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
+  ✓  [SPEC] no admin required for read
+
+↳ FR06-TC-028 POST not allowed on detail URL
   ┌
   │ 'X-Student-Id:', '23127273'
   └
   POST http://127.0.0.1:3000/api/products/1 [404 Not Found, 458B, 2ms]
-  ✓  POST returns 404
+  ✓  [SPEC] POST on /:id not allowed (404 or 405)
 
-↳ FR06-TC-029 PUT on detail URL
+↳ FR06-TC-029 PUT without auth rejected
   ┌
   │ 'X-Student-Id:', '23127273'
   └
-  PUT http://127.0.0.1:3000/api/products/4 [200 OK, 296B, 2ms]
-  ✓  PUT returns 200 (SUT allows unauthenticated update — bug)
+  PUT http://127.0.0.1:3000/api/products/5 [200 OK, 296B, 3ms]
+ 13. [SPEC] requires authentication
 
-↳ FR06-TC-030 DELETE without auth
+↳ FR06-TC-030 DELETE without auth rejected
   ┌
   │ 'X-Student-Id:', '23127273'
   └
-  DELETE http://127.0.0.1:3000/api/products/99998 [200 OK, 296B, 1ms]
-  ✓  DELETE returns 200 (SUT allows unauthenticated delete — bug)
+  DELETE http://127.0.0.1:3000/api/products/99997 [200 OK, 296B, 1ms]
+ 14. [SPEC] requires authentication
 
 ↳ FR06-TC-031 Content-Type JSON
   ┌
   │ 'X-Student-Id:', '23127273'
   └
   GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
-  ✓  Content-Type includes json
+  ✓  [SPEC] Content-Type includes json
 
 ↳ FR06-TC-032 Response time SLA
   ┌
   │ 'X-Student-Id:', '23127273'
   └
   GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
-  ✓  Status 200
-  ✓  Response < 2000ms
+  ✓  [SPEC] status 200
+  ✓  [SPEC] response < 2000ms
 
 ❏ 03 Performance & Edge
 ↳ FR06-TC-033 Idempotent read pass 1
   ┌
   │ 'X-Student-Id:', '23127273'
   └
-  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
-  ✓  Pass 1 status 200
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 2ms]
+  ✓  [SPEC] pass 1 status 200
 
 ↳ FR06-TC-033 Idempotent read pass 2
   ┌
   │ 'X-Student-Id:', '23127273'
   └
-  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
-  ✓  Pass 2 identical body
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 2ms]
+  ✓  [SPEC] pass 2 identical body
 
-↳ FR06-TC-034 Unicode id
+↳ FR06-TC-034 Unicode id rejected
   ┌
   │ 'X-Student-Id:', '23127273'
   └
   GET http://127.0.0.1:3000/api/products/%E4%B8%AD [200 OK, 267B, 1ms]
-  ✓  Status 200
-  ✓  Empty object
+ 15. [SPEC] status 400 Bad Request
 
-↳ FR06-TC-035 Whitespace id
+↳ FR06-TC-035 Whitespace-padded id rejected
   ┌
   │ 'X-Student-Id:', '23127273'
   └
   GET http://127.0.0.1:3000/api/products/%2001%20 [200 OK, 451B, 1ms]
-  ✓  Status 200
+ 16. [SPEC] status 400 Bad Request
 
-↳ FR06-TC-036 Null byte id
+↳ FR06-TC-036 Null byte id rejected
   ┌
   │ 'X-Student-Id:', '23127273'
   └
   GET http://127.0.0.1:3000/api/products/1%00 [200 OK, 451B, 1ms]
-  ✓  Status 200
+ 17. [SPEC] status 400 Bad Request
 
-↳ FR06-TC-037 Float string id
+↳ FR06-TC-037 Float id rejected
   ┌
   │ 'X-Student-Id:', '23127273'
   └
-  GET http://127.0.0.1:3000/api/products/2.0 [200 OK, 345B, 1ms]
-  ✓  Status 200 — SQLite coerces 2.0 to product 2
-  ✓  Returns product id 2
+  GET http://127.0.0.1:3000/api/products/2.0 [200 OK, 480B, 1ms]
+ 18. [SPEC] status 404 Not Found
 
 ↳ FR06-TC-038 List then detail integration
   ┌
   │ 'X-Student-Id:', '23127273'
   └
-  GET http://127.0.0.1:3000/api/products [200 OK, 1.08kB, 2ms]
-  ✓  List 200
-  ✓  List contains id 1
+  GET http://127.0.0.1:3000/api/products [200 OK, 1.14kB, 1ms]
+  ✓  [SPEC] list 200
+  ✓  [SPEC] list contains id 1
   GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
-  ✓  Detail id 1 matches list
+  ✓  [SPEC] detail matches list
 
 ↳ FR06-TC-039 CORS preflight OPTIONS
   ┌
   │ 'X-Student-Id:', '23127273'
   └
   OPTIONS http://127.0.0.1:3000/api/products/1 [204 No Content, 285B, 1ms]
-  ✓  OPTIONS 204
+  ✓  [SPEC] OPTIONS 204
 
 ❏ 04 Extended
-↳ FR06-TC-040 No rate limiting
+↳ FR06-TC-040 Rate limit (SEC07)
   ┌
   │ 'X-Student-Id:', '23127273'
   └
   GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
-  ✓  Single request 200 (no 429 in SUT)
+ 19. [SPEC] SEC07 rate limiting present (429 after abuse)
 
-↳ FR06-TC-EXT-001 Price string even id
+↳ FR06-TC-EXT-001 Even ID price must be number
   ┌
   │ 'X-Student-Id:', '23127273'
   └
-  GET http://127.0.0.1:3000/api/products/2 [200 OK, 345B, 1ms]
-  ✓  Extended: price typeof string
+  GET http://127.0.0.1:3000/api/products/2 [200 OK, 480B, 1ms]
+ 20. [SPEC] price is number
 
-↳ FR06-TC-EXT-002 Silent not-found
+↳ FR06-TC-EXT-002 Missing ID must 404
   ┌
   │ 'X-Student-Id:', '23127273'
   └
   GET http://127.0.0.1:3000/api/products/77777 [200 OK, 267B, 1ms]
-  ✓  Extended: 200 + {}
+ 21. [SPEC] status 404 Not Found
 
-↳ FR06-TC-EXT-003 Trailing slash list
+↳ FR06-TC-EXT-003 Trailing slash must not return list
   ┌
   │ 'X-Student-Id:', '23127273'
   └
-  GET http://127.0.0.1:3000/api/products [200 OK, 1.08kB, 1ms]
-  ✓  Extended: array response
+  GET http://127.0.0.1:3000/api/products [200 OK, 1.14kB, 1ms]
+ 22. [SPEC] must not return array for detail route
 
-↳ FR06-TC-EXT-004 Leading zero
+↳ FR06-TC-EXT-004 Leading-zero ID rejected
   ┌
   │ 'X-Student-Id:', '23127273'
   └
-  GET http://127.0.0.1:3000/api/products/01 [200 OK, 451B, 2ms]
-  ✓  Extended: id resolves to 1
+  GET http://127.0.0.1:3000/api/products/01 [200 OK, 451B, 1ms]
+ 23. [SPEC] status 400 Bad Request
 
-↳ FR06-TC-EXT-005 Invalid bearer public read
-  ┌
-  │ 'X-Student-Id:', '23127273'
-  └
-  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
-  ✓  Extended: 200 with garbage bearer
-
-↳ FR06-TC-EXT-006 Parity id=1 number
+↳ FR06-TC-EXT-005 Public read with garbage Bearer
   ┌
   │ 'X-Student-Id:', '23127273'
   └
   GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
-  ✓  Extended: odd id price number
+  ✓  [SPEC] public read 200 despite invalid token
 
-↳ FR06-TC-EXT-006 Parity id=2 string
+↳ FR06-TC-EXT-006 Schema parity — both prices number
   ┌
   │ 'X-Student-Id:', '23127273'
   └
-  GET http://127.0.0.1:3000/api/products/2 [200 OK, 345B, 1ms]
-  ✓  Extended: even id price string
-  ✓  Extended: inconsistent types across parity
+  GET http://127.0.0.1:3000/api/products/1 [200 OK, 451B, 1ms]
+  ✓  [SPEC] price is number
+
+↳ FR06-TC-EXT-006 Schema parity — id=2
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/products/2 [200 OK, 480B, 1ms]
+ 24. [SPEC] id=2 price is number (consistent schema)
+  ✓  [SPEC] same type as id=1
 
 ┌─────────────────────────┬─────────────────┬─────────────────┐
 │                         │        executed │          failed │
@@ -391,13 +383,135 @@ HW06_FR06_ProductDetail
 ├─────────────────────────┼─────────────────┼─────────────────┤
 │            test-scripts │              50 │               0 │
 ├─────────────────────────┼─────────────────┼─────────────────┤
-│      prerequest-scripts │              51 │               0 │
+│      prerequest-scripts │              54 │               0 │
 ├─────────────────────────┼─────────────────┼─────────────────┤
-│              assertions │              73 │               0 │
+│              assertions │              65 │              24 │
 ├─────────────────────────┴─────────────────┴─────────────────┤
-│ total run duration: 666ms                                   │
+│ total run duration: 660ms                                   │
 ├─────────────────────────────────────────────────────────────┤
-│ total data received: 9.47kB (approx)                        │
+│ total data received: 10.46kB (approx)                       │
 ├─────────────────────────────────────────────────────────────┤
-│ average response time: 1ms [min: 1ms, max: 15ms, s.d.: 1ms] │
+│ average response time: 1ms [min: 1ms, max: 25ms, s.d.: 3ms] │
 └─────────────────────────────────────────────────────────────┘
+
+   #  failure         detail                                                                     
+                                                                                                 
+ 01.  AssertionError  [SPEC] price is number                                                     
+                      expected 'string' to deeply equal 'number'                                 
+                      at assertion:2 in test-script                                              
+                      inside "01 Domain & Schema / FR06-TC-002 Valid product even ID"            
+                                                                                                 
+ 02.  AssertionError  [SPEC] status 404 Not Found                                                
+                      expected response to have status code 404 but got 200                      
+                      at assertion:0 in test-script                                              
+                      inside "01 Domain & Schema / FR06-TC-005 Non-existent ID"                  
+                                                                                                 
+ 03.  AssertionError  [SPEC] status 404 Not Found                                                
+                      expected response to have status code 404 but got 200                      
+                      at assertion:0 in test-script                                              
+                      inside "01 Domain & Schema / FR06-TC-006 ID zero"                          
+                                                                                                 
+ 04.  AssertionError  [SPEC] status 400 Bad Request                                              
+                      expected response to have status code 400 but got 200                      
+                      at assertion:0 in test-script                                              
+                      inside "01 Domain & Schema / FR06-TC-007 Negative ID"                      
+                                                                                                 
+ 05.  AssertionError  [SPEC] status 400 Bad Request                                              
+                      expected response to have status code 400 but got 200                      
+                      at assertion:0 in test-script                                              
+                      inside "01 Domain & Schema / FR06-TC-008 Non-numeric ID"                   
+                                                                                                 
+ 06.  AssertionError  [SPEC] status 400 Bad Request                                              
+                      expected response to have status code 400 but got 200                      
+                      at assertion:0 in test-script                                              
+                      inside "01 Domain & Schema / FR06-TC-009 Decimal ID"                       
+                                                                                                 
+ 07.  AssertionError  [SPEC] status 404 Not Found                                                
+                      expected response to have status code 404 but got 200                      
+                      at assertion:0 in test-script                                              
+                      inside "01 Domain & Schema / FR06-TC-010 Very large non-existent ID"       
+                                                                                                 
+ 08.  AssertionError  [SPEC] detail endpoint returns single object, not list                     
+                      expected [ { id: 1, …(5) }, …(4) ] to be an object                         
+                      at assertion:0 in test-script                                              
+                      inside "01 Domain & Schema / FR06-TC-011 Empty ID segment (detail)"        
+                                                                                                 
+ 09.  AssertionError  [SPEC] status 400 Bad Request                                              
+                      expected response to have status code 400 but got 200                      
+                      at assertion:0 in test-script                                              
+                      inside "01 Domain & Schema / FR06-TC-012 Leading-zero ID invalid format"   
+                                                                                                 
+ 10.  AssertionError  [SPEC] status 404 Not Found                                                
+                      expected response to have status code 404 but got 200                      
+                      at assertion:0 in test-script                                              
+                      inside "01 Domain & Schema / FR06-TC-020 Missing product error response"   
+                                                                                                 
+ 11.  AssertionError  [SPEC] rejects malformed/suspicious id (400 or 404)                        
+                      expected 200 to be one of [ 400, 404 ]                                     
+                      at assertion:0 in test-script                                              
+                      inside "02 Security & HTTP / FR06-TC-023 SQLi OR 1=1 rejected"             
+                                                                                                 
+ 12.  AssertionError  [SPEC] rejects SQLi path (400 or 404)                                      
+                      expected 200 to be one of [ 400, 404 ]                                     
+                      at assertion:0 in test-script                                              
+                      inside "02 Security & HTTP / FR06-TC-024 SQLi DROP rejected + DB intact"   
+                                                                                                 
+ 13.  AssertionError  [SPEC] requires authentication                                             
+                      expected 200 to be one of [ 401, 403 ]                                     
+                      at assertion:0 in test-script                                              
+                      inside "02 Security & HTTP / FR06-TC-029 PUT without auth rejected"        
+                                                                                                 
+ 14.  AssertionError  [SPEC] requires authentication                                             
+                      expected 200 to be one of [ 401, 403 ]                                     
+                      at assertion:0 in test-script                                              
+                      inside "02 Security & HTTP / FR06-TC-030 DELETE without auth rejected"     
+                                                                                                 
+ 15.  AssertionError  [SPEC] status 400 Bad Request                                              
+                      expected response to have status code 400 but got 200                      
+                      at assertion:0 in test-script                                              
+                      inside "03 Performance & Edge / FR06-TC-034 Unicode id rejected"           
+                                                                                                 
+ 16.  AssertionError  [SPEC] status 400 Bad Request                                              
+                      expected response to have status code 400 but got 200                      
+                      at assertion:0 in test-script                                              
+                      inside "03 Performance & Edge / FR06-TC-035 Whitespace-padded id rejected" 
+                                                                                                 
+ 17.  AssertionError  [SPEC] status 400 Bad Request                                              
+                      expected response to have status code 400 but got 200                      
+                      at assertion:0 in test-script                                              
+                      inside "03 Performance & Edge / FR06-TC-036 Null byte id rejected"         
+                                                                                                 
+ 18.  AssertionError  [SPEC] status 404 Not Found                                                
+                      expected response to have status code 404 but got 200                      
+                      at assertion:0 in test-script                                              
+                      inside "03 Performance & Edge / FR06-TC-037 Float id rejected"             
+                                                                                                 
+ 19.  AssertionError  [SPEC] SEC07 rate limiting present (429 after abuse)                       
+                      expected 200 to deeply equal 429                                           
+                      at assertion:0 in test-script                                              
+                      inside "04 Extended / FR06-TC-040 Rate limit (SEC07)"                      
+                                                                                                 
+ 20.  AssertionError  [SPEC] price is number                                                     
+                      expected 'string' to deeply equal 'number'                                 
+                      at assertion:0 in test-script                                              
+                      inside "04 Extended / FR06-TC-EXT-001 Even ID price must be number"        
+                                                                                                 
+ 21.  AssertionError  [SPEC] status 404 Not Found                                                
+                      expected response to have status code 404 but got 200                      
+                      at assertion:0 in test-script                                              
+                      inside "04 Extended / FR06-TC-EXT-002 Missing ID must 404"                 
+                                                                                                 
+ 22.  AssertionError  [SPEC] must not return array for detail route                              
+                      expected [ { id: 1, …(5) }, …(4) ] not to be an array                      
+                      at assertion:0 in test-script                                              
+                      inside "04 Extended / FR06-TC-EXT-003 Trailing slash must not return list" 
+                                                                                                 
+ 23.  AssertionError  [SPEC] status 400 Bad Request                                              
+                      expected response to have status code 400 but got 200                      
+                      at assertion:0 in test-script                                              
+                      inside "04 Extended / FR06-TC-EXT-004 Leading-zero ID rejected"            
+                                                                                                 
+ 24.  AssertionError  [SPEC] id=2 price is number (consistent schema)                            
+                      expected 'string' to deeply equal 'number'                                 
+                      at assertion:0 in test-script                                              
+                      inside "04 Extended / FR06-TC-EXT-006 Schema parity — id=2"                

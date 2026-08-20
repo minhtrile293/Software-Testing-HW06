@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "HW06_FR06_ProductDetail",
-    "description": "FR06 Product Detail View — 40 generated + 6 extended test cases. X-Student-Id on every request.",
+    "description": "FR06 Product Detail — spec-based assertions. Newman FAIL indicates SUT bug.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -10,7 +10,7 @@
       "value": ""
     },
     {
-      "key": "fr06_ext006_odd",
+      "key": "fr06_ext006_p1",
       "value": ""
     }
   ],
@@ -62,8 +62,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test('Login test user', () => pm.response.to.have.status(200));",
-                  "const j = pm.response.json();",
-                  "pm.environment.set('authToken', j.token);"
+                  "pm.environment.set('authToken', pm.response.json().token);"
                 ]
               }
             }
@@ -135,12 +134,12 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('[SPEC] status 200', () => pm.response.to.have.status(200));",
                   "const b = pm.response.json();",
-                  "pm.test('Has required fields', () => {",
+                  "pm.test('[SPEC] required fields present', () => {",
                   "  ['id','name','price','description','imageUrl','category_id'].forEach(k => pm.expect(b).to.have.property(k));",
                   "});",
-                  "pm.test('Price is number for odd id', () => pm.expect(typeof b.price).to.eql('number'));"
+                  "pm.test('[SPEC] price is number', () => pm.expect(typeof pm.response.json().price).to.eql('number'));"
                 ]
               }
             }
@@ -169,8 +168,13 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Price is string for even id (SUT behavior)', () => pm.expect(typeof pm.response.json().price).to.eql('string'));"
+                  "pm.test('[SPEC] status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('[SPEC] full product object', () => {",
+                  "  const b = pm.response.json();",
+                  "  pm.expect(b).to.have.property('id', 2);",
+                  "  pm.expect(b).to.have.property('name');",
+                  "});",
+                  "pm.test('[SPEC] price is number', () => pm.expect(typeof pm.response.json().price).to.eql('number'));"
                 ]
               }
             }
@@ -199,8 +203,8 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Name contains Keychron', () => pm.expect(pm.response.json().name).to.include('Keychron'));"
+                  "pm.test('[SPEC] status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('[SPEC] name contains Keychron', () => pm.expect(pm.response.json().name).to.include('Keychron'));"
                 ]
               }
             }
@@ -229,8 +233,8 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
-                  "pm.test('category_id is 2', () => pm.expect(pm.response.json().category_id).to.eql(2));"
+                  "pm.test('[SPEC] status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('[SPEC] category_id is 2', () => pm.expect(pm.response.json().category_id).to.eql(2));"
                 ]
               }
             }
@@ -259,8 +263,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Status 200 (SUT bug: should be 404)', () => pm.response.to.have.status(200));",
-                  "pm.test('Empty object body', () => pm.expect(pm.response.json()).to.eql({}));"
+                  "pm.test('[SPEC] status 404 Not Found', () => pm.response.to.have.status(404));"
                 ]
               }
             }
@@ -289,8 +292,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Empty object', () => pm.expect(pm.response.json()).to.eql({}));"
+                  "pm.test('[SPEC] status 404 Not Found', () => pm.response.to.have.status(404));"
                 ]
               }
             }
@@ -319,8 +321,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Empty object', () => pm.expect(pm.response.json()).to.eql({}));"
+                  "pm.test('[SPEC] status 400 Bad Request', () => pm.response.to.have.status(400));"
                 ]
               }
             }
@@ -349,8 +350,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Empty object', () => pm.expect(pm.response.json()).to.eql({}));"
+                  "pm.test('[SPEC] status 400 Bad Request', () => pm.response.to.have.status(400));"
                 ]
               }
             }
@@ -379,15 +379,14 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Empty object', () => pm.expect(pm.response.json()).to.eql({}));"
+                  "pm.test('[SPEC] status 400 Bad Request', () => pm.response.to.have.status(400));"
                 ]
               }
             }
           ]
         },
         {
-          "name": "FR06-TC-010 Very large ID",
+          "name": "FR06-TC-010 Very large non-existent ID",
           "request": {
             "method": "GET",
             "header": [],
@@ -409,15 +408,14 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Empty object', () => pm.expect(pm.response.json()).to.eql({}));"
+                  "pm.test('[SPEC] status 404 Not Found', () => pm.response.to.have.status(404));"
                 ]
               }
             }
           ]
         },
         {
-          "name": "FR06-TC-011 Trailing slash list route",
+          "name": "FR06-TC-011 Empty ID segment (detail)",
           "request": {
             "method": "GET",
             "header": [],
@@ -438,15 +436,20 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Response is array (list route)', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                  "pm.test('[SPEC] detail endpoint returns single object, not list', () => {",
+                  "  pm.response.to.have.status(200);",
+                  "  const b = pm.response.json();",
+                  "  pm.expect(b).to.be.an('object');",
+                  "  pm.expect(b).to.not.be.an('array');",
+                  "  pm.expect(b).to.have.property('id');",
+                  "});"
                 ]
               }
             }
           ]
         },
         {
-          "name": "FR06-TC-012 Leading-zero ID",
+          "name": "FR06-TC-012 Leading-zero ID invalid format",
           "request": {
             "method": "GET",
             "header": [],
@@ -468,8 +471,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Resolves to product id 1', () => pm.expect(pm.response.json().id).to.eql(1));"
+                  "pm.test('[SPEC] status 400 Bad Request', () => pm.response.to.have.status(400));"
                 ]
               }
             }
@@ -498,7 +500,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('id === 1', () => pm.expect(pm.response.json().id).to.eql(1));"
+                  "pm.test('[SPEC] id === 1', () => pm.expect(pm.response.json().id).to.eql(1));"
                 ]
               }
             }
@@ -528,14 +530,14 @@
                 "type": "text/javascript",
                 "exec": [
                   "const n = pm.response.json().name;",
-                  "pm.test('name is non-empty string', () => { pm.expect(typeof n).to.eql('string'); pm.expect(n.length).to.be.above(0); });"
+                  "pm.test('[SPEC] name non-empty string', () => { pm.expect(typeof n).to.eql('string'); pm.expect(n.length).to.be.above(0); });"
                 ]
               }
             }
           ]
         },
         {
-          "name": "FR06-TC-015 Schema price number odd",
+          "name": "FR06-TC-015 Schema price number",
           "request": {
             "method": "GET",
             "header": [],
@@ -557,7 +559,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('price is number', () => pm.expect(typeof pm.response.json().price).to.eql('number'));"
+                  "pm.test('[SPEC] price is number', () => pm.expect(typeof pm.response.json().price).to.eql('number'));"
                 ]
               }
             }
@@ -586,7 +588,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('description is string', () => pm.expect(typeof pm.response.json().description).to.eql('string'));"
+                  "pm.test('[SPEC] description is string', () => pm.expect(typeof pm.response.json().description).to.eql('string'));"
                 ]
               }
             }
@@ -615,7 +617,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('imageUrl starts with http', () => pm.expect(pm.response.json().imageUrl).to.match(/^http/));"
+                  "pm.test('[SPEC] imageUrl is URL string', () => pm.expect(pm.response.json().imageUrl).to.match(/^http/));"
                 ]
               }
             }
@@ -644,14 +646,14 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('category_id in 1-3', () => pm.expect(pm.response.json().category_id).to.be.oneOf([1,2,3]));"
+                  "pm.test('[SPEC] category_id integer 1-3', () => pm.expect(pm.response.json().category_id).to.be.oneOf([1,2,3]));"
                 ]
               }
             }
           ]
         },
         {
-          "name": "FR06-TC-019 No extra keys",
+          "name": "FR06-TC-019 No extra top-level keys",
           "request": {
             "method": "GET",
             "header": [],
@@ -674,14 +676,14 @@
                 "type": "text/javascript",
                 "exec": [
                   "const keys = Object.keys(pm.response.json()).sort();",
-                  "pm.test('Only expected keys', () => pm.expect(keys).to.eql(['category_id','description','id','imageUrl','name','price'].sort()));"
+                  "pm.test('[SPEC] only expected keys', () => pm.expect(keys).to.eql(['category_id','description','id','imageUrl','name','price'].sort()));"
                 ]
               }
             }
           ]
         },
         {
-          "name": "FR06-TC-020 Missing product schema",
+          "name": "FR06-TC-020 Missing product error response",
           "request": {
             "method": "GET",
             "header": [],
@@ -703,7 +705,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Status 200 empty object', () => { pm.response.to.have.status(200); pm.expect(pm.response.json()).to.eql({}); });"
+                  "pm.test('[SPEC] status 404 Not Found', () => pm.response.to.have.status(404));"
                 ]
               }
             }
@@ -715,7 +717,7 @@
       "name": "02 Security & HTTP",
       "item": [
         {
-          "name": "FR06-TC-021 No Authorization header",
+          "name": "FR06-TC-021 Public read without Authorization",
           "request": {
             "method": "GET",
             "header": [],
@@ -746,15 +748,15 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Public read without auth', () => pm.response.to.have.status(200));",
-                  "pm.test('Returns product', () => pm.expect(pm.response.json().id).to.eql(1));"
+                  "pm.test('[SPEC] public read status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('[SPEC] returns product', () => pm.expect(pm.response.json().id).to.eql(1));"
                 ]
               }
             }
           ]
         },
         {
-          "name": "FR06-TC-022 Invalid Bearer token",
+          "name": "FR06-TC-022 Invalid Bearer on public read",
           "request": {
             "method": "GET",
             "header": [
@@ -781,14 +783,15 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Still 200 with invalid token', () => pm.response.to.have.status(200));"
+                  "pm.test('[SPEC] public read still 200', () => pm.response.to.have.status(200));",
+                  "pm.test('[SPEC] returns product', () => pm.expect(pm.response.json().id).to.eql(1));"
                 ]
               }
             }
           ]
         },
         {
-          "name": "FR06-TC-023 SQLi OR 1=1",
+          "name": "FR06-TC-023 SQLi OR 1=1 rejected",
           "request": {
             "method": "GET",
             "header": [],
@@ -810,15 +813,14 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Empty or safe response', () => pm.expect(pm.response.json()).to.eql({}));"
+                  "pm.test('[SPEC] rejects malformed/suspicious id (400 or 404)', () => pm.expect(pm.response.code).to.be.oneOf([400, 404]));"
                 ]
               }
             }
           ]
         },
         {
-          "name": "FR06-TC-024 SQLi DROP encoded + list intact",
+          "name": "FR06-TC-024 SQLi DROP rejected + DB intact",
           "request": {
             "method": "GET",
             "header": [],
@@ -840,9 +842,9 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('SQLi path returns 200 {}', () => { pm.response.to.have.status(200); pm.expect(pm.response.json()).to.eql({}); });",
+                  "pm.test('[SPEC] rejects SQLi path (400 or 404)', () => pm.expect(pm.response.code).to.be.oneOf([400, 404]));",
                   "pm.sendRequest({ url: pm.environment.get('baseUrl') + '/api/products', method: 'GET', header: { 'X-Student-Id': pm.environment.get('studentId') } }, (err, res) => {",
-                  "  pm.test('Products list still available', () => { pm.expect(err).to.be.null; pm.expect(res.code).to.eql(200); pm.expect(JSON.parse(res.stream.toString())).to.be.an('array').that.is.not.empty; });",
+                  "  pm.test('[SPEC] products table intact', () => { pm.expect(err).to.be.null; pm.expect(res.code).to.eql(200); pm.expect(JSON.parse(res.stream.toString())).to.be.an('array').that.is.not.empty; });",
                   "});"
                 ]
               }
@@ -850,7 +852,7 @@
           ]
         },
         {
-          "name": "FR06-TC-025 XSS in path",
+          "name": "FR06-TC-025 XSS path rejected",
           "request": {
             "method": "GET",
             "header": [],
@@ -873,15 +875,15 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Status 404 (Express no route match)', () => pm.response.to.have.status(404));",
-                  "pm.test('No script in body', () => pm.expect(pm.response.text()).to.not.include('<script>'));"
+                  "pm.test('[SPEC] rejects XSS path (400 or 404)', () => pm.expect(pm.response.code).to.be.oneOf([400, 404]));",
+                  "pm.test('[SPEC] no script reflected', () => pm.expect(pm.response.text()).to.not.include('<script>'));"
                 ]
               }
             }
           ]
         },
         {
-          "name": "FR06-TC-026 IDOR with user token",
+          "name": "FR06-TC-026 Public catalog with user token",
           "request": {
             "method": "GET",
             "header": [
@@ -908,14 +910,15 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Public data with user token', () => pm.response.to.have.status(200));"
+                  "pm.test('[SPEC] authenticated user can read public catalog', () => pm.response.to.have.status(200));",
+                  "pm.test('[SPEC] returns product data', () => pm.expect(pm.response.json().id).to.eql(1));"
                 ]
               }
             }
           ]
         },
         {
-          "name": "FR06-TC-027 No admin required",
+          "name": "FR06-TC-027 Public read without admin role",
           "request": {
             "method": "GET",
             "header": [],
@@ -937,14 +940,14 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Public without admin', () => pm.response.to.have.status(200));"
+                  "pm.test('[SPEC] no admin required for read', () => pm.response.to.have.status(200));"
                 ]
               }
             }
           ]
         },
         {
-          "name": "FR06-TC-028 POST not allowed on detail",
+          "name": "FR06-TC-028 POST not allowed on detail URL",
           "request": {
             "method": "POST",
             "header": [
@@ -971,18 +974,27 @@
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.remove('Authorization');"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('POST returns 404', () => pm.response.to.have.status(404));"
+                  "pm.test('[SPEC] POST on /:id not allowed (404 or 405)', () => pm.expect(pm.response.code).to.be.oneOf([404, 405]));"
                 ]
               }
             }
           ]
         },
         {
-          "name": "FR06-TC-029 PUT on detail URL",
+          "name": "FR06-TC-029 PUT without auth rejected",
           "request": {
             "method": "PUT",
             "header": [
@@ -992,57 +1004,75 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/api/products/4",
+              "raw": "{{baseUrl}}/api/products/5",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "api",
                 "products",
-                "4"
+                "5"
               ]
             },
             "body": {
               "mode": "raw",
-              "raw": "{\"name\":\"Tai nghe AirPods Pro 2\",\"price\":6000000,\"description\":\"Chống ồn\",\"imageUrl\":\"https://placehold.co/300x300/png?text=AirPods+Pro\",\"category_id\":3}"
+              "raw": "{\"name\":\"Keychron Q1\",\"price\":4000000,\"description\":\"test\",\"imageUrl\":\"http://x\",\"category_id\":3}"
             }
           },
           "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.remove('Authorization');"
+                ]
+              }
+            },
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('PUT returns 200 (SUT allows unauthenticated update — bug)', () => pm.response.to.have.status(200));"
+                  "pm.test('[SPEC] requires authentication', () => pm.expect(pm.response.code).to.be.oneOf([401, 403]));"
                 ]
               }
             }
           ]
         },
         {
-          "name": "FR06-TC-030 DELETE without auth",
+          "name": "FR06-TC-030 DELETE without auth rejected",
           "request": {
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/products/99998",
+              "raw": "{{baseUrl}}/api/products/99997",
               "host": [
                 "{{baseUrl}}"
               ],
               "path": [
                 "api",
                 "products",
-                "99998"
+                "99997"
               ]
             }
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.remove('Authorization');"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('DELETE returns 200 (SUT allows unauthenticated delete — bug)', () => pm.response.to.have.status(200));"
+                  "pm.test('[SPEC] requires authentication', () => pm.expect(pm.response.code).to.be.oneOf([401, 403]));"
                 ]
               }
             }
@@ -1071,7 +1101,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Content-Type includes json', () => pm.expect(pm.response.headers.get('Content-Type')).to.include('json'));"
+                  "pm.test('[SPEC] Content-Type includes json', () => pm.expect(pm.response.headers.get('Content-Type')).to.include('json'));"
                 ]
               }
             }
@@ -1100,8 +1130,8 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Response < 2000ms', () => pm.expect(pm.response.responseTime).to.be.below(2000));"
+                  "pm.test('[SPEC] status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('[SPEC] response < 2000ms', () => pm.expect(pm.response.responseTime).to.be.below(2000));"
                 ]
               }
             }
@@ -1135,7 +1165,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Pass 1 status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('[SPEC] pass 1 status 200', () => pm.response.to.have.status(200));",
                   "pm.collectionVariables.set('fr06_tc033_body', pm.response.text());"
                 ]
               }
@@ -1165,14 +1195,14 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Pass 2 identical body', () => pm.expect(pm.response.text()).to.eql(pm.collectionVariables.get('fr06_tc033_body')));"
+                  "pm.test('[SPEC] pass 2 identical body', () => pm.expect(pm.response.text()).to.eql(pm.collectionVariables.get('fr06_tc033_body')));"
                 ]
               }
             }
           ]
         },
         {
-          "name": "FR06-TC-034 Unicode id",
+          "name": "FR06-TC-034 Unicode id rejected",
           "request": {
             "method": "GET",
             "header": [],
@@ -1194,15 +1224,14 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
-                  "pm.test('Empty object', () => pm.expect(pm.response.json()).to.eql({}));"
+                  "pm.test('[SPEC] status 400 Bad Request', () => pm.response.to.have.status(400));"
                 ]
               }
             }
           ]
         },
         {
-          "name": "FR06-TC-035 Whitespace id",
+          "name": "FR06-TC-035 Whitespace-padded id rejected",
           "request": {
             "method": "GET",
             "header": [],
@@ -1224,14 +1253,14 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                  "pm.test('[SPEC] status 400 Bad Request', () => pm.response.to.have.status(400));"
                 ]
               }
             }
           ]
         },
         {
-          "name": "FR06-TC-036 Null byte id",
+          "name": "FR06-TC-036 Null byte id rejected",
           "request": {
             "method": "GET",
             "header": [],
@@ -1253,14 +1282,14 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Status 200', () => pm.response.to.have.status(200));"
+                  "pm.test('[SPEC] status 400 Bad Request', () => pm.response.to.have.status(400));"
                 ]
               }
             }
           ]
         },
         {
-          "name": "FR06-TC-037 Float string id",
+          "name": "FR06-TC-037 Float id rejected",
           "request": {
             "method": "GET",
             "header": [],
@@ -1282,8 +1311,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Status 200 — SQLite coerces 2.0 to product 2', () => pm.response.to.have.status(200));",
-                  "pm.test('Returns product id 2', () => pm.expect(pm.response.json().id).to.eql(2));"
+                  "pm.test('[SPEC] status 404 Not Found', () => pm.response.to.have.status(404));"
                 ]
               }
             }
@@ -1311,11 +1339,11 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('List 200', () => pm.response.to.have.status(200));",
+                  "pm.test('[SPEC] list 200', () => pm.response.to.have.status(200));",
                   "const list = pm.response.json();",
-                  "pm.test('List contains id 1', () => pm.expect(list.some(p => p.id === 1)).to.be.true);",
+                  "pm.test('[SPEC] list contains id 1', () => pm.expect(list.some(p => p.id === 1)).to.be.true);",
                   "pm.sendRequest({ url: pm.environment.get('baseUrl') + '/api/products/1', method: 'GET', header: { 'X-Student-Id': pm.environment.get('studentId') } }, (err, res) => {",
-                  "  pm.test('Detail id 1 matches list', () => { pm.expect(err).to.be.null; pm.expect(JSON.parse(res.stream.toString()).id).to.eql(1); });",
+                  "  pm.test('[SPEC] detail matches list', () => { pm.expect(err).to.be.null; pm.expect(JSON.parse(res.stream.toString()).id).to.eql(1); });",
                   "});"
                 ]
               }
@@ -1350,7 +1378,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('OPTIONS 204', () => pm.response.to.have.status(204));"
+                  "pm.test('[SPEC] OPTIONS 204', () => pm.response.to.have.status(204));"
                 ]
               }
             }
@@ -1362,7 +1390,7 @@
       "name": "04 Extended",
       "item": [
         {
-          "name": "FR06-TC-040 No rate limiting",
+          "name": "FR06-TC-040 Rate limit (SEC07)",
           "request": {
             "method": "GET",
             "header": [],
@@ -1384,14 +1412,16 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Single request 200 (no 429 in SUT)', () => pm.response.to.have.status(200));"
+                  "pm.test('[SPEC] SEC07 rate limiting present (429 after abuse)', () => {",
+                  "  pm.expect(pm.response.code).to.eql(429);",
+                  "});"
                 ]
               }
             }
           ]
         },
         {
-          "name": "FR06-TC-EXT-001 Price string even id",
+          "name": "FR06-TC-EXT-001 Even ID price must be number",
           "request": {
             "method": "GET",
             "header": [],
@@ -1413,14 +1443,14 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Extended: price typeof string', () => pm.expect(typeof pm.response.json().price).to.eql('string'));"
+                  "pm.test('[SPEC] price is number', () => pm.expect(typeof pm.response.json().price).to.eql('number'));"
                 ]
               }
             }
           ]
         },
         {
-          "name": "FR06-TC-EXT-002 Silent not-found",
+          "name": "FR06-TC-EXT-002 Missing ID must 404",
           "request": {
             "method": "GET",
             "header": [],
@@ -1442,14 +1472,14 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Extended: 200 + {}', () => { pm.response.to.have.status(200); pm.expect(pm.response.json()).to.eql({}); });"
+                  "pm.test('[SPEC] status 404 Not Found', () => pm.response.to.have.status(404));"
                 ]
               }
             }
           ]
         },
         {
-          "name": "FR06-TC-EXT-003 Trailing slash list",
+          "name": "FR06-TC-EXT-003 Trailing slash must not return list",
           "request": {
             "method": "GET",
             "header": [],
@@ -1470,14 +1500,16 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Extended: array response', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                  "pm.test('[SPEC] must not return array for detail route', () => {",
+                  "  pm.expect(pm.response.json()).to.not.be.an('array');",
+                  "});"
                 ]
               }
             }
           ]
         },
         {
-          "name": "FR06-TC-EXT-004 Leading zero",
+          "name": "FR06-TC-EXT-004 Leading-zero ID rejected",
           "request": {
             "method": "GET",
             "header": [],
@@ -1499,14 +1531,14 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Extended: id resolves to 1', () => pm.expect(pm.response.json().id).to.eql(1));"
+                  "pm.test('[SPEC] status 400 Bad Request', () => pm.response.to.have.status(400));"
                 ]
               }
             }
           ]
         },
         {
-          "name": "FR06-TC-EXT-005 Invalid bearer public read",
+          "name": "FR06-TC-EXT-005 Public read with garbage Bearer",
           "request": {
             "method": "GET",
             "header": [
@@ -1533,14 +1565,14 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Extended: 200 with garbage bearer', () => pm.response.to.have.status(200));"
+                  "pm.test('[SPEC] public read 200 despite invalid token', () => pm.response.to.have.status(200));"
                 ]
               }
             }
           ]
         },
         {
-          "name": "FR06-TC-EXT-006 Parity id=1 number",
+          "name": "FR06-TC-EXT-006 Schema parity — both prices number",
           "request": {
             "method": "GET",
             "header": [],
@@ -1562,15 +1594,15 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Extended: odd id price number', () => pm.expect(typeof pm.response.json().price).to.eql('number'));",
-                  "pm.collectionVariables.set('fr06_ext006_odd', typeof pm.response.json().price);"
+                  "pm.test('[SPEC] price is number', () => pm.expect(typeof pm.response.json().price).to.eql('number'));",
+                  "pm.collectionVariables.set('fr06_ext006_p1', typeof pm.response.json().price);"
                 ]
               }
             }
           ]
         },
         {
-          "name": "FR06-TC-EXT-006 Parity id=2 string",
+          "name": "FR06-TC-EXT-006 Schema parity — id=2",
           "request": {
             "method": "GET",
             "header": [],
@@ -1592,11 +1624,8 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Extended: even id price string', () => pm.expect(typeof pm.response.json().price).to.eql('string'));",
-                  "pm.test('Extended: inconsistent types across parity', () => {",
-                  "  pm.expect(pm.collectionVariables.get('fr06_ext006_odd')).to.eql('number');",
-                  "  pm.expect(typeof pm.response.json().price).to.eql('string');",
-                  "});"
+                  "pm.test('[SPEC] id=2 price is number (consistent schema)', () => pm.expect(typeof pm.response.json().price).to.eql('number'));",
+                  "pm.test('[SPEC] same type as id=1', () => pm.expect(pm.collectionVariables.get('fr06_ext006_p1')).to.eql('number'));"
                 ]
               }
             }

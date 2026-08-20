@@ -195,11 +195,11 @@ _Cases derived from reading `server.js` after AI generation — not inferable fr
 
 | Bug ID | Title | Severity | Evidence | GitHub Issue |
 |---|---|---|---|---|
-| FR06-BUG-001 | Missing product returns **200 `{}`** instead of 404 | Medium | TC-005, TC-EXT-002; `server.js` L161 | _(pending)_ |
-| FR06-BUG-002 | **`price` type inconsistent** — number for odd id, string for even id | Medium | TC-002, TC-EXT-001/006; L162 | _(pending)_ |
-| FR06-BUG-003 | **Unauthenticated PUT** `/api/products/:id` succeeds | High | TC-029; L179–188 (no `authenticateToken`) | _(pending)_ |
-| FR06-BUG-004 | **Unauthenticated DELETE** `/api/products/:id` succeeds | High | TC-030; L191–196 | _(pending)_ |
-| FR06-BUG-005 | `GET /api/products/` returns **product list** (array), not detail 404 | Low | TC-011, TC-EXT-003 | _(pending)_ |
+| FR06-BUG-001 | Missing product returns **200 `{}`** instead of 404 | Medium | TC-005, TC-EXT-002; `server.js` L161 | [#1](https://github.com/minhtrile293/Software-Testing-HW06/issues/1) |
+| FR06-BUG-002 | **`price` type inconsistent** — number for odd id, string for even id | Medium | TC-002, TC-EXT-001/006; L162 | [#2](https://github.com/minhtrile293/Software-Testing-HW06/issues/2) |
+| FR06-BUG-003 | **Unauthenticated PUT** `/api/products/:id` succeeds | High | TC-029; L179–188 | [#3](https://github.com/minhtrile293/Software-Testing-HW06/issues/3) |
+| FR06-BUG-004 | **Unauthenticated DELETE** `/api/products/:id` succeeds | High | TC-030; L191–196 | [#4](https://github.com/minhtrile293/Software-Testing-HW06/issues/4) |
+| FR06-BUG-005 | `GET /api/products/` returns **product list** (array), not detail 404 | Low | TC-011, TC-EXT-003 | [#5](https://github.com/minhtrile293/Software-Testing-HW06/issues/5) |
 
 ---
 

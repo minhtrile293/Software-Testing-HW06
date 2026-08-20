@@ -446,7 +446,18 @@ _AI-generated in 4 steps: (1) auth & role, (2) empty/missing body, (3) row valid
 
 ## 6. CI/CD Integration
 
-See `ci-cd/CI_CD_Report.md` for pipeline configuration, screenshots, and links to the two sample runs (all-passing and one-failing).
+GitHub Actions workflow: [`.github/workflows/api-tests.yml`](../.github/workflows/api-tests.yml)
+
+| Item | Detail |
+|---|---|
+| SUT in CI | Clone `ttbhanh/eshop-sut` → start `backend/server.js` on port 3000 |
+| Newman | Data-driven `-d postman/data/*.csv` for FR06, FR07, FR16 |
+| Default profile | `ci-smoke-pass` (all assertions green) |
+| Fail demo profile | `ci-smoke-one-fail` (1 failure: FR06-TC-005 / BUG-001) |
+| Full regression | `full` profile — 73 failed assertions (expected SUT bugs) |
+| Reports | Uploaded as Actions artifacts; HTML in `results/newman/` |
+
+Full write-up, screenshots, and two-sample-commit instructions: [`ci-cd/CI_CD_Report.md`](../ci-cd/CI_CD_Report.md)
 
 ---
 

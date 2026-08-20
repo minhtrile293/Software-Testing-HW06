@@ -34,7 +34,7 @@ This repository contains the Postman + Newman API testing project for HW06. Thre
 - **SUT:** EShop backend API (`http://127.0.0.1:3000`) — smoke-tested 2026-08-20
 - **Header:** `X-Student-Id: 23127273` (pre-request script on every request)
 - **Postman features used:** _(list in `main-report/main-report.md` §5)_
-- **CI/CD:** GitHub Actions — see `ci-cd/CI_CD_Report.md`
+- **CI/CD:** GitHub Actions — [`ci-cd/CI_CD_Report.md`](ci-cd/CI_CD_Report.md) · workflow [`api-tests.yml`](.github/workflows/api-tests.yml)
 - **Demo video (Agent Skill):** _(add link when recorded)_
 
 ---

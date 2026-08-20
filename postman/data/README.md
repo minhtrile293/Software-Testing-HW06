@@ -9,6 +9,8 @@ All test **input data** for HW06 lives here. Collections read rows via `pm.itera
 | `fr06-product-detail-data.csv` | FR06 Product Detail | 48 | `HW06_FR06_ProductDetail.postman_collection.json` |
 | `fr07-shopping-cart-data.csv` | FR07 Shopping Cart | 46 | `HW06_FR07_ShoppingCart.postman_collection.json` |
 | `fr16-product-import-data.csv` | FR16 Product Import | 46 | `HW06_FR16_ProductImportCSV.postman_collection.json` |
+| `fr*-ci-smoke-pass.csv` | CI smoke (all pass) | 5 each | Used by GitHub Actions default profile |
+| `fr06-ci-smoke-one-fail.csv` | CI fail demo | 4 | 1 intentional failure (FR06-TC-005) |
 
 Regenerate CSV + collection after edits:
 

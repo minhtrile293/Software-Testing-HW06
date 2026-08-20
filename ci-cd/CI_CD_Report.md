@@ -43,11 +43,10 @@ Manual override: GitHub → Actions → **API Tests (HW06)** → Run workflow �
 | Field | Value |
 |---|---|
 | Profile | `ci-smoke-pass` |
-| Commit (local verify) | _(set after push — use commit with `ci-cd/profile.txt` = `ci-smoke-pass`)_ |
-| Commit message | `ci: integrate GitHub Actions smoke-pass pipeline` |
-| Pipeline URL | `https://github.com/minhtrile293/Software-Testing-HW06/actions/workflows/api-tests.yml` |
-| Result | **15 requests, 22 assertions, 0 failed** (local Newman against localhost:3000) |
-| Artifact | `newman-reports-ci-smoke-pass-<run_id>` |
+| Commit | `d6d18f7` — `fix(ci): correct default Newman profile name in profile.txt` |
+| Pipeline run | https://github.com/minhtrile293/Software-Testing-HW06/actions/runs/32330085948 |
+| Result | **15 requests, 22 assertions, 0 failed** (GitHub Actions, `127.0.0.1:3000`) |
+| Artifact | `newman-reports-ci-smoke-pass-32330085948` |
 
 ![All-passing run](screenshots/ci-all-passing.svg)
 
@@ -60,11 +59,10 @@ Manual override: GitHub → Actions → **API Tests (HW06)** → Run workflow �
 | Field | Value |
 |---|---|
 | Profile | `ci-smoke-one-fail` |
-| Commit (local verify) | _(set after push — change `ci-cd/profile.txt` to `ci-smoke-one-fail`)_ |
-| Commit message | `ci: demo pipeline with one intentional failure (FR06-TC-005)` |
-| Pipeline URL | same workflow |
+| Trigger | `workflow_dispatch` with input `newman_profile=ci-smoke-one-fail` |
+| Pipeline run | https://github.com/minhtrile293/Software-Testing-HW06/actions/runs/32330296496 |
 | Result | **14 requests, 19 assertions, 1 failed** — `FR06-TC-005` expects **404**, SUT returns **200 {}** (BUG-001) |
-| Artifact | `newman-reports-ci-smoke-one-fail-<run_id>` |
+| Artifact | `newman-reports-ci-smoke-one-fail-32330296496` |
 
 ![One-failing run](screenshots/ci-one-failing.svg)
 
@@ -111,4 +109,4 @@ python3 scripts/capture-ci-screenshots.py         # refresh ci-cd/screenshots/*.
 
 - Newman targets `http://127.0.0.1:3000` — satisfies §11 anti-cheat (localhost hostname in CI logs).
 - Full regression **must fail** while SUT bugs exist; smoke profiles isolate demo runs for TA.
-- After push, paste Actions run URLs into §2 and §3 above.
+- Sample run URLs recorded in §2 and §3 above (push `d6d18f7` + workflow_dispatch one-fail demo).

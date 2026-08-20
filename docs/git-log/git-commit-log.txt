@@ -1,3 +1,9 @@
+# HW06 Git commit log — student 23127273
+# Public GitHub repository: https://github.com/minhtrile293/Software-Testing-HW06
+# This file on GitHub: https://github.com/minhtrile293/Software-Testing-HW06/blob/main/docs/git-log/git-commit-log.txt
+#
+# Export command: git log --reverse --format="%H%n%an <%ae>%n%ai%n%s%n%b%n---"
+
 574fe9de6c0bea85ad10e7065c9ea7aedb8ed550
 minhtrile293 <23127273@student.hcmus.edu.vn>
 2026-08-20 09:24:07 +0700
@@ -128,6 +134,41 @@ d6d18f7e8f32c8e9383de40fd71dd0f5714ebe54
 minhtrile293 <23127273@student.hcmus.edu.vn>
 2026-08-20 10:57:12 +0700
 fix(ci): correct default Newman profile name in profile.txt
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+---
+f59784b3342eebcaf7e66785f301ddf79d29be85
+minhtrile293 <23127273@student.hcmus.edu.vn>
+2026-08-20 11:02:46 +0700
+docs: complete AI Critique and AI Audit Report (FR07/FR16/CI)
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+---
+772fa5f2e8371ab1a5fc5995f05c4dee47def503
+minhtrile293 <23127273@student.hcmus.edu.vn>
+2026-08-20 11:02:46 +0700
+docs: add Excel test summary and exported git commit log
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+---
+dad21f5f83e3b070dc05dda431549ed70f43fcaf
+minhtrile293 <23127273@student.hcmus.edu.vn>
+2026-08-20 11:02:46 +0700
+docs(agent-skill): add architecture diagram and demo recording outline
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+---
+c4c189950ce636eb2fde3d2172337d4ec7fea515
+minhtrile293 <23127273@student.hcmus.edu.vn>
+2026-08-20 11:02:46 +0700
+docs(ci): record GitHub Actions pass and one-fail demo run URLs
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+---
+6a9a01c3cb98e41b4c13f985eb6c4e0e3ca63320
+minhtrile293 <23127273@student.hcmus.edu.vn>
+2026-08-20 11:02:46 +0700
+docs: finalize README self-assessment and Newman execution evidence
 Co-authored-by: Cursor <cursoragent@cursor.com>
 
 ---

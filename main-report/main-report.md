@@ -2,6 +2,14 @@
 
 Student ID: `23127273`
 
+### Submission links (HW06 §14)
+
+| Item | Link |
+|---|---|
+| Public GitHub repository | https://github.com/minhtrile293/Software-Testing-HW06 |
+| Git commit log (text file) | [docs/git-log/git-commit-log.txt](https://github.com/minhtrile293/Software-Testing-HW06/blob/main/docs/git-log/git-commit-log.txt) |
+| GitHub Issues | https://github.com/minhtrile293/Software-Testing-HW06/issues |
+
 ---
 
 ## 1. Introduction
@@ -13,7 +21,8 @@ This assignment applies AI-assisted API testing to three selected EShop backend 
 ### 1.2. System Under Test
 
 - **Application:** EShop REST backend
-- **Repository:** https://github.com/ttbhanh/eshop-sut
+- **SUT repository:** https://github.com/ttbhanh/eshop-sut
+- **This homework repository:** https://github.com/minhtrile293/Software-Testing-HW06
 - **Base URL:** `http://127.0.0.1:3000`
 - **API specification:** `api_specification.md` in the SUT repository
 
@@ -473,4 +482,12 @@ Full write-up, screenshots, and two-sample-commit instructions: [`ci-cd/CI_CD_Re
 | Failed (assertions) | 24 | 26 | 23 | 73 |
 | Bugs (from failures) | 6 | 3 | 6 | 15 |
 
-Excel version: `main-report/test-summary.xlsx`
+Excel version: [`main-report/test-summary.xlsx`](test-summary.xlsx)
+
+---
+
+## 8. Git Commit Log
+
+Full text log (HW06 §12): [`docs/git-log/git-commit-log.txt`](https://github.com/minhtrile293/Software-Testing-HW06/blob/main/docs/git-log/git-commit-log.txt)
+
+Public repository: https://github.com/minhtrile293/Software-Testing-HW06

@@ -1,0 +1,2 @@
+https://github.com/minhtrile293/Software-Testing-HW06
+https://github.com/minhtrile293/Software-Testing-HW06/blob/main/docs/git-log/git-commit-log.txt

@@ -1,9 +1,16 @@
 # HW06 – AI-Assisted API Testing
 
-Student ID: `23127273`  
-GitHub: https://github.com/minhtrile293/Software-Testing-HW06
+Student ID: `23127273`
 
 This repository contains the Postman + Newman API testing project for HW06. Three APIs from EShop are tested: **FR06 Product Detail View** (Pool A), **FR07 Shopping Cart** (Pool B), and **FR16 Product Import from CSV** (Pool C).
+
+### Submission links (HW06 §14)
+
+| Item | Link |
+|---|---|
+| Public GitHub repository | https://github.com/minhtrile293/Software-Testing-HW06 |
+| Git commit log (text file) | [docs/git-log/git-commit-log.txt](https://github.com/minhtrile293/Software-Testing-HW06/blob/main/docs/git-log/git-commit-log.txt) |
+| GitHub Issues (bugs) | https://github.com/minhtrile293/Software-Testing-HW06/issues |
 
 ---
 
@@ -57,8 +64,10 @@ _Rationale: full pipeline + 15 GitHub Issues with evidence for all three APIs; A
 | CI/CD report | `ci-cd/CI_CD_Report.md` |
 | AI Audit Report | `docs/ai-audit/AI_Audit_Report.md` |
 | AI Critique | `docs/ai-critique/AI_Critique.md` |
-| Git commit log | `docs/git-log/git-commit-log.txt` |
+| Git commit log | [`docs/git-log/git-commit-log.txt`](https://github.com/minhtrile293/Software-Testing-HW06/blob/main/docs/git-log/git-commit-log.txt) |
 | Agent Skills | `agent-skill/` |
+| Public GitHub repository | https://github.com/minhtrile293/Software-Testing-HW06 |
+| Repo + commit-log URLs | [`github-repo-link.txt`](https://github.com/minhtrile293/Software-Testing-HW06/blob/main/github-repo-link.txt) |
 
 ---
 
@@ -89,5 +98,6 @@ Software-Testing-HW06/
 | CI/CD report | `ci-cd/CI_CD_Report.md` |
 | AI Audit Report | `docs/ai-audit/AI_Audit_Report.md` |
 | AI Critique | `docs/ai-critique/AI_Critique.md` |
-| Git commit log | `docs/git-log/git-commit-log.txt` |
+| Git commit log | [`docs/git-log/git-commit-log.txt`](https://github.com/minhtrile293/Software-Testing-HW06/blob/main/docs/git-log/git-commit-log.txt) |
 | Agent Skills | `agent-skill/` |
+| Public GitHub repository | https://github.com/minhtrile293/Software-Testing-HW06 |

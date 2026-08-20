@@ -159,16 +159,19 @@ _Spec-based expectations. Failures during execute confirm bugs._
 ### 2.4. Execute
 
 - **Collection:** `postman/collections/HW06_FR06_ProductDetail.postman_collection.json` (`scripts/build-fr06-collection.js`)
+- **Data file:** `postman/data/fr06-product-detail-data.csv` — **all request input** (48 rows); Collection Runner / Newman `-d`
 - **Newman report:** `results/newman/fr06-report.html`
 - **Console log:** `results/newman/fr06-console.txt`
-- **Approach:** Assertions prefixed `[SPEC]` — **fail = SUT bug**
-- **Run date:** 2026-08-20 (re-run after methodology fix)
+- **Approach:** Assertions prefixed `[SPEC]` — **fail = SUT bug**; `assertion_profile` column drives test script
+- **Run date:** 2026-08-20 (data-driven refactor)
 
 | Metric | Value |
 |---|---:|
-| Test case requests | 48 (+ 2 setup) |
-| Assertions | 65 |
-| **Passed** | **41** |
+| CSV data rows | 48 |
+| Iterations (Newman `-d`) | 48 |
+| Setup requests per iteration | 2 |
+| Assertions | 208 |
+| **Passed** | **184** |
 | **Failed** | **24** |
 | Avg response time | ~1 ms |
 
@@ -198,81 +201,230 @@ _Spec-based expectations. Failures during execute confirm bugs._
 
 ## 3. API 2 — Shopping Cart (FR07, Pool B)
 
+**Endpoints:** `GET /api/cart`, `POST /api/cart` — both require `Authorization: Bearer` token.
+
 ### 3.1. Generate (≥ 35 test cases)
 
-| TC ID | Description | Method | Endpoint | Input | Expected | Category |
+_AI-generated (Cursor) in 4 steps: (1) auth partitions, (2) GET cart schema, (3) POST validation & business rules, (4) security SEC01–SEC07 + HTTP methods. Total: **40 test cases**._
+
+| TC ID | Description | Method | Endpoint | Input | Expected (spec) | Category |
 |---|---|---|---|---|---|---|
-| FR07-TC-001 | | | | | | |
+| FR07-TC-001 | GET cart no token | GET | `/api/cart` | no Authorization | 401/403 | Security SEC03 |
+| FR07-TC-002 | POST cart no token | POST | `/api/cart` | no Authorization | 401/403 | Security SEC03 |
+| FR07-TC-003 | GET invalid token | GET | `/api/cart` | `Bearer invalid` | 403 | Security SEC03 |
+| FR07-TC-004 | POST invalid token | POST | `/api/cart` | `Bearer invalid` | 403 | Security SEC03 |
+| FR07-TC-005 | GET empty cart (fresh user) | GET | `/api/cart` | new user token | 200 `[]` | Domain — valid |
+| FR07-TC-006 | GET cart is array | GET | `/api/cart` | valid token | 200; response is array | Schema |
+| FR07-TC-007 | GET Content-Type JSON | GET | `/api/cart` | valid token | Content-Type includes json | Schema |
+| FR07-TC-008 | POST valid item | POST | `/api/cart` | id,name,price,qty | 200; message Added | Domain — valid |
+| FR07-TC-009 | POST quantity=1 boundary | POST | `/api/cart` | qty=1 | 200 | Domain — boundary |
+| FR07-TC-010 | GET reflects added item | GET | `/api/cart` | after POST | 200; item has id,name,price,quantity | Integration |
+| FR07-TC-011 | POST quantity zero | POST | `/api/cart` | qty=0 | **400** | Domain — invalid |
+| FR07-TC-012 | POST quantity negative | POST | `/api/cart` | qty=-1 | **400** | Domain — invalid |
+| FR07-TC-013 | POST quantity decimal | POST | `/api/cart` | qty=1.5 | **400** | Domain — invalid |
+| FR07-TC-014 | POST missing id | POST | `/api/cart` | no id field | **400** | Schema |
+| FR07-TC-015 | POST missing name | POST | `/api/cart` | no name | **400** | Schema |
+| FR07-TC-016 | POST missing price | POST | `/api/cart` | no price | **400** | Schema |
+| FR07-TC-017 | POST missing quantity | POST | `/api/cart` | no quantity | **400** | Schema |
+| FR07-TC-018 | POST price zero | POST | `/api/cart` | price=0 | **400** | Domain — invalid |
+| FR07-TC-019 | POST price negative | POST | `/api/cart` | price=-100 | **400** | Domain — invalid |
+| FR07-TC-020 | POST empty body | POST | `/api/cart` | `{}` | **400** | Schema |
+| FR07-TC-021 | POST name empty string | POST | `/api/cart` | name="" | **400** | Domain — invalid |
+| FR07-TC-022 | POST quantity string | POST | `/api/cart` | qty="abc" | **400** | Schema |
+| FR07-TC-023 | POST price string | POST | `/api/cart` | price="abc" | **400** | Schema |
+| FR07-TC-024 | Cart item price is number | GET | `/api/cart` | after add | typeof price === number | Schema |
+| FR07-TC-025 | Cart item quantity is number | GET | `/api/cart` | after add | typeof quantity === number | Schema |
+| FR07-TC-026 | SQLi in product name | POST | `/api/cart` | SQLi name | **400** | Security SEC01 |
+| FR07-TC-027 | XSS in name | POST | `/api/cart` | `<script>` | 200/400; no script in response | Security SEC02 |
+| FR07-TC-028 | Duplicate product merge qty | POST×2 + GET | `/api/cart` | same id twice | 1 row; qty=2 | Business logic |
+| FR07-TC-029 | Add different product | POST | `/api/cart` | id=2 | 200 | Domain — valid |
+| FR07-TC-030 | PUT not allowed | PUT | `/api/cart` | any | 404/405 | HTTP method |
+| FR07-TC-031 | DELETE not allowed | DELETE | `/api/cart` | any | 404/405 | HTTP method |
+| FR07-TC-032 | Response time SLA | GET | `/api/cart` | valid | 200; < 2000 ms | Performance |
+| FR07-TC-033 | Cart isolated per user | GET | `/api/cart` | user A vs fresh user B | independent carts | Security SEC04 |
+| FR07-TC-034 | Oversized quantity | POST | `/api/cart` | qty=999999 | **400** or cap | Domain — boundary |
+| FR07-TC-035 | Null fields | POST | `/api/cart` | all null | **400** | Schema |
+| FR07-TC-036 | GET schema all keys | GET | `/api/cart` | after adds | each item has id,name,price,quantity | Schema |
+| FR07-TC-037 | POST id zero | POST | `/api/cart` | id=0 | **400** | Domain — invalid |
+| FR07-TC-038 | POST id negative | POST | `/api/cart` | id=-1 | **400** | Domain — invalid |
+| FR07-TC-039 | Rate limit burst | GET | `/api/cart` | rapid fire | **429** | Security SEC07 |
+| FR07-TC-040 | Array body rejected | POST | `/api/cart` | JSON array body | **400** | Schema |
 
 ### 3.2. Audit (VALID / INVALID / INCOMPLETE)
 
-| TC ID | Label | Reasoning | Corrected? |
+| TC ID | Label | Reasoning | Action |
 |---|---|---|---|
-| FR07-TC-001 | | | |
+| FR07-TC-001 – 004 | VALID | Auth required on cart endpoints | Keep |
+| FR07-TC-005 – 010 | VALID | Positive path + schema | Keep |
+| FR07-TC-011 – 023 | VALID | Input validation per REST/spec | Keep — SUT accepts all → **FAIL** |
+| FR07-TC-024 – 025 | VALID | Type consistency in cart items | Keep — pass (client-sent types preserved) |
+| FR07-TC-026 | VALID | SQLi must be rejected | Keep — **FAIL** (200) |
+| FR07-TC-027 | VALID | XSS handling | Keep — pass |
+| FR07-TC-028 | VALID | Merge duplicate product_id | Keep — **FAIL** (multiple rows) |
+| FR07-TC-029 – 033 | VALID | HTTP methods, perf, isolation | Keep |
+| FR07-TC-034 – 040 | VALID | Edge + SEC07 | Keep — most **FAIL** (no validation / no rate limit) |
+
+**Audit summary:** VALID 40 · INVALID 0 · INCOMPLETE 0
 
 ### 3.3. Extend (≥ 5 manual test cases)
 
-| TC ID | Description | Why AI missed it |
-|---|---|---|
-| FR07-TC-EXT-001 | | |
+| TC ID | Description | Method | Endpoint | Expected (spec) | Why AI missed it |
+|---|---|---|---|---|---|
+| FR07-TC-EXT-001 | quantity=0 must reject | POST | `/api/cart` | 400 | Requires reading `push(req.body)` in server.js |
+| FR07-TC-EXT-002 | At most one row per product id | GET | `/api/cart` | filter id=1 → length ≤ 1 | Merge logic not in AI draft |
+| FR07-TC-EXT-003 | Combined invalid payload | POST | `/api/cart` | 400 (price<0, qty=0) | Compound invalid case |
+| FR07-TC-EXT-004 | Cart persists in memory | GET | `/api/cart` | non-empty after prior adds | In-memory `userCarts` design |
+| FR07-TC-EXT-005 | Lowercase `authorization` header | GET | `/api/cart` | 401/403 | HTTP header case sensitivity |
+| FR07-TC-EXT-006 | Fresh user multi-item cart | GET | `/api/cart` | ≥2 distinct items after adds | Chained state with fresh user |
 
 ### 3.4. Execute
 
-- **Collection:** `postman/collections/HW06_FR07_ShoppingCart.postman_collection.json`
+- **Collection:** `postman/collections/HW06_FR07_ShoppingCart.postman_collection.json` (`scripts/build-fr07-collection.js`)
+- **Data file:** `postman/data/fr07-shopping-cart-data.csv` — **all request input** (46 rows)
 - **Newman report:** `results/newman/fr07-report.html`
-- **Data file:** `postman/data/fr07-shopping-cart-data.csv`
+- **Console log:** `results/newman/fr07-console.txt`
+- **Approach:** Data-driven via CSV + `[SPEC]` assertions
+- **Run date:** 2026-08-20
 
 | Metric | Value |
 |---|---:|
-| Executed | |
-| Passed | |
-| Failed | |
+| CSV data rows | 46 |
+| Iterations (Newman `-d`) | 46 |
+| Assertions | 190 |
+| **Passed** | **164** |
+| **Failed** | **26** |
+| Avg response time | ~2 ms |
 
-### 3.5. Bugs Found
+| Failing TC (sample) | Newman result | Bug |
+|---|---|---|
+| TC-011 – 023, TC-026, TC-034–035, TC-037–038, TC-040, EXT-001, EXT-003 | expected 400, got 200 | BUG-001 |
+| TC-028c, EXT-002 | expected 1 row qty=2, got multiple rows | BUG-002 |
+| TC-039 | expected 429, got 200 | BUG-003 |
 
-| Bug ID | Title | Severity | GitHub Issue |
-|---|---|---|---|
-| | | | |
+### 3.5. Bugs Found (from Newman failures)
+
+| Bug ID | Title | Severity | Failing tests | GitHub Issue |
+|---|---|---|---|---|
+| FR07-BUG-001 | **No input validation** on POST `/api/cart` (accepts qty=0, missing fields, etc.) | High | TC-011–023,026,034–035,037–038,040, EXT-001,003 | [#7](https://github.com/minhtrile293/Software-Testing-HW06/issues/7) |
+| FR07-BUG-002 | **Duplicate product_id not merged** — multiple cart rows | Medium | TC-028c, EXT-002 | [#8](https://github.com/minhtrile293/Software-Testing-HW06/issues/8) |
+| FR07-BUG-003 | **No rate limiting** on cart API (SEC07) | Medium | TC-039 | [#9](https://github.com/minhtrile293/Software-Testing-HW06/issues/9) |
 
 ---
 
 ## 4. API 3 — Product Import from CSV (FR16, Pool C)
 
+**Endpoint:** `POST /api/admin/import-products` — admin-only; body `{ products: [{ name, price, ... }] }`.
+
 ### 4.1. Generate (≥ 35 test cases)
 
-| TC ID | Description | Method | Endpoint | Input | Expected | Category |
+_AI-generated in 4 steps: (1) auth & role, (2) empty/missing body, (3) row validation & rollback, (4) security + batch edge cases. Total: **40 test cases**._
+
+| TC ID | Description | Method | Endpoint | Input | Expected (spec) | Category |
 |---|---|---|---|---|---|---|
-| FR16-TC-001 | | | | | | |
+| FR16-TC-001 | No auth | POST | `/api/admin/import-products` | no token | 401/403 | Security SEC03 |
+| FR16-TC-002 | User token (non-admin) | POST | same | user Bearer | **403** | Security SEC05 |
+| FR16-TC-003 | Admin valid import | POST | same | valid product | 200; inserted≥1; errors=[] | Domain — valid |
+| FR16-TC-004 | Empty products array | POST | same | `products:[]` | **400** | Domain — invalid |
+| FR16-TC-005 | Missing products key | POST | same | `{}` | **400** | Schema |
+| FR16-TC-006 | products not array | POST | same | string | **400** | Schema |
+| FR16-TC-007 | Missing product name | POST | same | no name field | 400 or inserted=0 | Validation |
+| FR16-TC-008 | Price zero rejected | POST | same | price=0 | **400** | Domain — invalid |
+| FR16-TC-009 | Price negative | POST | same | price=-100 | **400** | Domain — invalid |
+| FR16-TC-010 | Price non-numeric | POST | same | price="abc" | **400** | Schema |
+| FR16-TC-011 | Price missing | POST | same | no price | **400** | Schema |
+| FR16-TC-012 | Empty name | POST | same | name="" | **400** | Domain — invalid |
+| FR16-TC-013 | Partial batch rollback | POST | same | mixed valid/invalid | **400**; inserted=0 | Business logic |
+| FR16-TC-014 | Response schema | POST | same | valid | message, inserted, errors | Schema |
+| FR16-TC-015 | inserted count | POST | same | 1 row | inserted=1 | Schema |
+| FR16-TC-016 | Invalid token | POST | same | garbage Bearer | **403** | Security SEC03 |
+| FR16-TC-017 | GET not allowed | GET | same | — | 404/405 | HTTP method |
+| FR16-TC-018 | PUT not allowed | PUT | same | — | 404/405 | HTTP method |
+| FR16-TC-019 | SQLi in name | POST | same | DROP TABLE | 200/400; DB intact | Security SEC01 |
+| FR16-TC-020 | XSS in name | POST | same | `<script>` | no script in response | Security SEC02 |
+| FR16-TC-021 | category_id optional default | POST | same | omit category_id | 200; default cat | Domain — valid |
+| FR16-TC-022 | Invalid category_id | POST | same | category_id=99999 | **400** | Domain — invalid |
+| FR16-TC-023 | Batch 2 valid rows | POST | same | 2 products | inserted=2 | Domain — valid |
+| FR16-TC-024 | products null | POST | same | null | **400** | Schema |
+| FR16-TC-025 | Empty object in array | POST | same | `[{}]` | **400** | Validation |
+| FR16-TC-026 | Float price | POST | same | price=10.5 | **400** | Domain — invalid |
+| FR16-TC-027 | Very long name | POST | same | 500 chars | 200/400 | Domain — boundary |
+| FR16-TC-028 | Duplicate names in batch | POST | same | same name ×2 | 200 | Domain — valid |
+| FR16-TC-029 | Rate limit SEC07 | POST | same | burst | **429** | Security SEC07 |
+| FR16-TC-030 | Content-Type required | POST | same | non-JSON body | **400/415** | Schema |
+| FR16-TC-031 | description optional | POST | same | omit | 200 | Schema |
+| FR16-TC-032 | imageUrl optional | POST | same | omit | 200 | Schema |
+| FR16-TC-033 | Negative category_id | POST | same | -1 | **400** | Domain — invalid |
+| FR16-TC-034 | Extra fields ignored | POST | same | foo=bar | 200 | Schema |
+| FR16-TC-035 | Admin role explicit | POST | same | user token | **403** | Security SEC05 |
+| FR16-TC-036 | Price string number | POST | same | price="1000" | **400** | Schema |
+| FR16-TC-037 | Null array element | POST | same | `[null]` | **400** | Schema |
+| FR16-TC-038 | Response time | POST | same | valid | < 2000 ms | Performance |
+| FR16-TC-039 | Whitespace-only name | POST | same | name="   " | **400** | Domain — invalid |
+| FR16-TC-040 | Large batch 10 items | POST | same | 10 rows | inserted=10 | Domain — valid |
 
 ### 4.2. Audit (VALID / INVALID / INCOMPLETE)
 
-| TC ID | Label | Reasoning | Corrected? |
+| TC ID | Label | Reasoning | Action |
 |---|---|---|---|
-| FR16-TC-001 | | | |
+| FR16-TC-001 | VALID | Auth required | Keep — pass |
+| FR16-TC-002, TC-035 | VALID | Admin role required on `/admin/*` | Keep — **FAIL** (200) |
+| FR16-TC-003 – 006 | VALID | Body structure checks | Keep — pass on 004–006 |
+| FR16-TC-007 | VALID | Missing name → reject or 0 insert | Keep — pass (inserted=0 + errors) |
+| FR16-TC-008 – 012 | VALID | Price/name validation | Keep — **FAIL** |
+| FR16-TC-013 | VALID | All-or-nothing transaction | Keep — **FAIL** (partial insert) |
+| FR16-TC-014 – 018 | VALID | Schema + HTTP methods | Keep |
+| FR16-TC-019 – 021 | VALID | Security + defaults | Keep — pass |
+| FR16-TC-022 – 040 | VALID | Category, batch, SEC07, edge | Keep — many **FAIL** |
+
+**Audit summary:** VALID 40 · INVALID 0 · INCOMPLETE 0
 
 ### 4.3. Extend (≥ 5 manual test cases)
 
-| TC ID | Description | Why AI missed it |
-|---|---|---|
-| FR16-TC-EXT-001 | | |
+| TC ID | Description | Expected (spec) | Why AI missed it |
+|---|---|---|---|
+| FR16-TC-EXT-001 | User role escalation | 403 | Only `authenticateToken`, no role middleware |
+| FR16-TC-EXT-002 | price=0 accepted | 400 | No server-side price check in loop |
+| FR16-TC-EXT-003 | Partial insert no rollback | 400 on mixed batch | No DB transaction |
+| FR16-TC-EXT-004 | Missing name returns 200 | 400 reject batch | Errors array instead of HTTP 400 |
+| FR16-TC-EXT-005 | Negative price | 400 | Same as EXT-002 |
+| FR16-TC-EXT-006 | Admin middleware missing | 403 for user | Code review of L199 |
 
 ### 4.4. Execute
 
-- **Collection:** `postman/collections/HW06_FR16_ProductImportCSV.postman_collection.json`
+- **Collection:** `postman/collections/HW06_FR16_ProductImportCSV.postman_collection.json` (`scripts/build-fr16-collection.js`)
+- **Data file:** `postman/data/fr16-product-import-data.csv` — **all request input** (46 rows)
 - **Newman report:** `results/newman/fr16-report.html`
-- **Data file:** `postman/data/fr16-product-import-data.csv`
+- **Console log:** `results/newman/fr16-console.txt`
+- **Run date:** 2026-08-20
 
 | Metric | Value |
 |---|---:|
-| Executed | |
-| Passed | |
-| Failed | |
+| CSV data rows | 46 |
+| Iterations (Newman `-d`) | 46 |
+| Assertions | 186 |
+| **Passed** | **163** |
+| **Failed** | **23** |
+| Avg response time | ~2 ms |
 
-### 4.5. Bugs Found
+| Failing TC (sample) | Newman result | Bug |
+|---|---|---|
+| TC-002, TC-035, EXT-001, EXT-006 | expected 403, got 200 | BUG-001 |
+| TC-008–012, TC-026, TC-036, EXT-002, EXT-005 | expected 400, got 200 | BUG-002 |
+| TC-013, EXT-003, EXT-004 | expected 400 rollback, got 200 partial | BUG-003 |
+| TC-022, TC-033 | expected 400 invalid category | BUG-004 |
+| TC-029 | expected 429 | BUG-005 |
+| TC-030, TC-037 | expected 400/415, got 500 | BUG-006 |
 
-| Bug ID | Title | Severity | GitHub Issue |
-|---|---|---|---|
-| | | | |
+### 4.5. Bugs Found (from Newman failures)
+
+| Bug ID | Title | Severity | Failing tests | GitHub Issue |
+|---|---|---|---|---|
+| FR16-BUG-001 | **Non-admin can import** (role escalation) | Critical | TC-002, TC-035, EXT-001, EXT-006 | [#10](https://github.com/minhtrile293/Software-Testing-HW06/issues/10) |
+| FR16-BUG-002 | **No price validation** (0, negative, string, float) | High | TC-008–012,026,036, EXT-002,005 | [#11](https://github.com/minhtrile293/Software-Testing-HW06/issues/11) |
+| FR16-BUG-003 | **Partial import without rollback** | High | TC-013, EXT-003, EXT-004 | [#12](https://github.com/minhtrile293/Software-Testing-HW06/issues/12) |
+| FR16-BUG-004 | **Invalid category_id accepted** | Medium | TC-022, TC-033 | [#13](https://github.com/minhtrile293/Software-Testing-HW06/issues/13) |
+| FR16-BUG-005 | **No rate limiting** (SEC07) | Medium | TC-029 | [#14](https://github.com/minhtrile293/Software-Testing-HW06/issues/14) |
+| FR16-BUG-006 | **Malformed body returns 500** not 400 | Medium | TC-030, TC-037 | [#15](https://github.com/minhtrile293/Software-Testing-HW06/issues/15) |
 
 ---
 
@@ -280,12 +432,12 @@ _Spec-based expectations. Failures during execute confirm bugs._
 
 | Feature | How used in this project |
 |---|---|
-| Collections | FR06: 4 folders, 50 requests, collection-level pre-request |
+| Collections | FR06/07/16: Setup folder + **one data-driven executor** per API |
 | Environments | `HW06_local.postman_environment.json` — baseUrl, studentId, tokens |
-| Variables | `{{baseUrl}}`, `{{authToken}}`, `{{adminToken}}`, collection vars for idempotency |
-| Pre-request scripts | `X-Student-Id: 23127273` on every request |
-| Tests / assertions | 73 assertions on FR06 (schema, status, typeof, chained checks) |
-| Collection Runner + data file | CSV ready; FR06 run via Newman CLI (full collection) |
+| Variables | CSV columns → `pm.iterationData`; env: `{{authToken}}`, `{{adminToken}}`, `{{cartFreshToken}}` |
+| Pre-request scripts | `X-Student-Id: 23127273`; executor applies method/path/body/auth from CSV row |
+| Tests / assertions | `assertion_profile` column → `[SPEC]` switch (584 assertions total with `-d`) |
+| **Collection Runner + data file** | **`postman/data/fr06|fr07|fr16-*.csv`** — 140 rows; Newman `-d` required |
 | Monitors | |
 | Mock servers | |
 | Workspaces | |
@@ -302,12 +454,12 @@ See `ci-cd/CI_CD_Report.md` for pipeline configuration, screenshots, and links t
 
 | Metric | FR06 | FR07 | FR16 | Total |
 |---|---:|---:|---:|---:|
-| Generated | 40 | | | 40 |
-| Audited (VALID) | 14 | | | 14 |
-| Extended | 6 | | | 6 |
-| Executed | 48 | | | 48 |
-| Passed (assertions) | 41 | | | 41 |
-| Failed (assertions) | 24 | | | 24 |
-| Bugs (from failures) | 6 | | | 6 |
+| Generated | 40 | 40 | 40 | 120 |
+| Audited (VALID) | 32 | 40 | 40 | 112 |
+| Extended | 6 | 6 | 6 | 18 |
+| Executed (requests) | 48 | 48 | 46 | 142 |
+| Passed (assertions) | 184 | 164 | 163 | 511 |
+| Failed (assertions) | 24 | 26 | 23 | 73 |
+| Bugs (from failures) | 6 | 3 | 6 | 15 |
 
 Excel version: `main-report/test-summary.xlsx`

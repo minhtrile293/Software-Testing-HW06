@@ -57,6 +57,18 @@ BUGS = [
         "cmd": ["curl", "-s", "-i", f"{BASE}/api/products/", "-H", f"X-Student-Id: {STUDENT}"],
         "note": "Expected: detail 404 | Actual: 200 JSON array (list route)",
     },
+    {
+        "id": "FR06-BUG-006",
+        "slug": "no-rate-limit-sec07",
+        "title": "GET /api/products/1 burst (SEC07)",
+        "cmd": None,
+        "note": "Expected: 429 after abuse | Actual: all 200 (no rate limiting)",
+        "multi": [
+            ["curl", "-s", "-o", "/dev/null", "-w", "req1 HTTP:%{http_code}\n", f"{BASE}/api/products/1", "-H", f"X-Student-Id: {STUDENT}"],
+            ["curl", "-s", "-o", "/dev/null", "-w", "req2 HTTP:%{http_code}\n", f"{BASE}/api/products/1", "-H", f"X-Student-Id: {STUDENT}"],
+            ["curl", "-s", "-o", "/dev/null", "-w", "req3 HTTP:%{http_code}\n", f"{BASE}/api/products/1", "-H", f"X-Student-Id: {STUDENT}"],
+        ],
+    },
 ]
 
 
@@ -69,10 +81,13 @@ def body_for(bug):
         parts = []
         for i, cmd in enumerate(bug["multi"], 1):
             raw = run_cmd(cmd)
-            j = json.loads(raw)
-            parts.append(f"Request {i}: {' '.join(cmd[2:4])}")
-            parts.append(json.dumps(j, ensure_ascii=False, indent=2))
-            parts.append(f"typeof price = {type(j.get('price')).__name__}")
+            if bug["id"] == "FR06-BUG-002":
+                j = json.loads(raw)
+                parts.append(f"Request {i}: {' '.join(cmd[2:4])}")
+                parts.append(json.dumps(j, ensure_ascii=False, indent=2))
+                parts.append(f"typeof price = {type(j.get('price')).__name__}")
+            else:
+                parts.append(raw.strip())
         return "\n\n".join(parts)
     return run_cmd(bug["cmd"])
 

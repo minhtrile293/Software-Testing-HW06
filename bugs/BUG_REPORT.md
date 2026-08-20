@@ -9,6 +9,7 @@
 | FR06-BUG-003 | FR06 | PUT without auth | 401/403 | 200 | TC-029 | [#3](https://github.com/minhtrile293/Software-Testing-HW06/issues/3) | High |
 | FR06-BUG-004 | FR06 | DELETE without auth | 401/403 | 200 | TC-030 | [#4](https://github.com/minhtrile293/Software-Testing-HW06/issues/4) | High |
 | FR06-BUG-005 | FR06 | Trailing slash returns list | single object | JSON array | TC-011, EXT-003 | [#5](https://github.com/minhtrile293/Software-Testing-HW06/issues/5) | Low |
+| FR06-BUG-006 | FR06 | No rate limiting (SEC07) | 429 after burst | all 200 | TC-040 | [#6](https://github.com/minhtrile293/Software-Testing-HW06/issues/6) | Medium |
 
 ## Screenshots
 
@@ -19,6 +20,7 @@
 | FR06-BUG-003 | `bugs/screenshots/FR06-BUG-003-unauthenticated-put.svg` |
 | FR06-BUG-004 | `bugs/screenshots/FR06-BUG-004-unauthenticated-delete.svg` |
 | FR06-BUG-005 | `bugs/screenshots/FR06-BUG-005-trailing-slash-list.svg` |
+| FR06-BUG-006 | `bugs/screenshots/FR06-BUG-006-no-rate-limit-sec07.svg` |
 
 ## Automation
 

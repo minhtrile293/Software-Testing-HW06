@@ -28,7 +28,7 @@ This repository contains the Postman + Newman API testing project for HW06. Thre
 | Test cases executed | 48 | | | 48 |
 | Passed (assertions) | 41 | | | 41 |
 | Failed (assertions) | 24 | | | 24 |
-| Bugs found | 5 | | | 5 |
+| Bugs found | 6 | | | 6 |
 
 - **Tool:** Postman + Newman 6.2.2
 - **SUT:** EShop backend API (`http://127.0.0.1:3000`) — smoke-tested 2026-08-20

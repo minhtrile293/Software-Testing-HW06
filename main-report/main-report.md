@@ -181,7 +181,7 @@ _Spec-based expectations. Failures during execute confirm bugs._
 | TC-029 | expected 401/403, got 200 | BUG-003 |
 | TC-030 | expected 401/403, got 200 | BUG-004 |
 | TC-011, EXT-003 | expected object, got array | BUG-005 |
-| TC-040 | expected 429, got 200 | Missing SEC07 rate limit |
+| TC-040 | expected 429, got 200 | BUG-006 |
 
 ### 2.5. Bugs Found (from Newman failures)
 
@@ -192,6 +192,7 @@ _Spec-based expectations. Failures during execute confirm bugs._
 | FR06-BUG-003 | **Unauthenticated PUT** `/api/products/:id` | High | TC-029 | [#3](https://github.com/minhtrile293/Software-Testing-HW06/issues/3) |
 | FR06-BUG-004 | **Unauthenticated DELETE** `/api/products/:id` | High | TC-030 | [#4](https://github.com/minhtrile293/Software-Testing-HW06/issues/4) |
 | FR06-BUG-005 | `GET /api/products/` returns **list array** | Low | TC-011, EXT-003 | [#5](https://github.com/minhtrile293/Software-Testing-HW06/issues/5) |
+| FR06-BUG-006 | **No rate limiting** on product detail (SEC07) | Medium | TC-040 | [#6](https://github.com/minhtrile293/Software-Testing-HW06/issues/6) |
 
 ---
 
@@ -307,6 +308,6 @@ See `ci-cd/CI_CD_Report.md` for pipeline configuration, screenshots, and links t
 | Executed | 48 | | | 48 |
 | Passed (assertions) | 41 | | | 41 |
 | Failed (assertions) | 24 | | | 24 |
-| Bugs (from failures) | 5 | | | 5 |
+| Bugs (from failures) | 6 | | | 6 |
 
 Excel version: `main-report/test-summary.xlsx`

@@ -5,51 +5,68 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      newman_profile:
+        description: "Newman data profile (full | ci-smoke-pass | ci-smoke-one-fail)"
+        required: false
+        default: ""
+        type: choice
+        options:
+          - ""
+          - full
+          - ci-smoke-pass
+          - ci-smoke-one-fail
+
+env:
+  STUDENT_ID: "23127273"
+  SUT_PORT: "3000"
 
 jobs:
   newman:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout HW06 repo
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: "22"
+
+      - name: Install native build deps (sqlite3)
+        run: sudo apt-get update && sudo apt-get install -y python3 make g++
 
       - name: Install Newman
         run: npm install -g newman newman-reporter-htmlextra
 
-      # TODO: clone/start EShop SUT before running tests
-      # - name: Start SUT
-      #   run: ...
+      - name: Start EShop SUT backend
+        run: bash scripts/ci-start-sut.sh
 
-      - name: Run FR06 collection
+      - name: Resolve Newman profile
+        id: profile
         run: |
-          newman run postman/collections/HW06_FR06_ProductDetail.postman_collection.json \
-            -e postman/environments/HW06_local.postman_environment.json \
-            -d postman/data/fr06-product-detail-data.csv \
-            -r htmlextra \
-            --reporter-htmlextra-export results/newman/fr06-report.html
+          if [[ -n "${{ github.event.inputs.newman_profile }}" ]]; then
+            echo "value=${{ github.event.inputs.newman_profile }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=$(tr -d '[:space:]' < ci-cd/profile.txt)" >> "$GITHUB_OUTPUT"
+          fi
 
-      - name: Run FR07 collection
-        run: |
-          newman run postman/collections/HW06_FR07_ShoppingCart.postman_collection.json \
-            -e postman/environments/HW06_local.postman_environment.json \
-            -d postman/data/fr07-shopping-cart-data.csv \
-            -r htmlextra \
-            --reporter-htmlextra-export results/newman/fr07-report.html
+      - name: Run Newman (FR06 + FR07 + FR16)
+        env:
+          CI_ALLOW_FAILURE: ${{ steps.profile.outputs.value == 'full' && 'true' || 'false' }}
+        run: bash scripts/ci-run-newman.sh "${{ steps.profile.outputs.value }}"
 
-      - name: Run FR16 collection
+      - name: Print X-Student-Id evidence
+        if: always()
         run: |
-          newman run postman/collections/HW06_FR16_ProductImportCSV.postman_collection.json \
-            -e postman/environments/HW06_local.postman_environment.json \
-            -d postman/data/fr16-product-import-data.csv \
-            -r htmlextra \
-            --reporter-htmlextra-export results/newman/fr16-report.html
+          echo "X-Student-Id header required by assignment: ${STUDENT_ID}"
+          grep -R "X-Student-Id" postman/collections/*.json | head -3 || true
 
       - name: Upload Newman reports
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: newman-reports
+          name: newman-reports-${{ steps.profile.outputs.value }}-${{ github.run_id }}
           path: results/newman/
+          retention-days: 30

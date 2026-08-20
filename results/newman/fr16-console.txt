@@ -1,0 +1,485 @@
+HW06_FR16_ProductImportCSV
+
+❏ 00 Setup
+↳ Setup — Login admin
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/login [200 OK, 640B, 16ms]
+  ✓  Login admin
+
+↳ Setup — Login test user
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/login [200 OK, 635B, 3ms]
+  ✓  Login user
+
+❏ 01 Auth & Access
+↳ FR16-TC-001 No auth
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [401 Unauthorized, 301B, 1ms]
+  ✓  [SPEC] requires auth 401/403
+
+↳ FR16-TC-002 User token not admin
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 2ms]
+  1. [SPEC] non-admin forbidden 403
+
+↳ FR16-TC-003 Admin valid import
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 3ms]
+  ✓  [SPEC] status 200
+  ✓  [SPEC] inserted >= 1
+  ✓  [SPEC] errors empty
+
+❏ 02 Valid & Empty
+↳ FR16-TC-004 Empty products array
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [400 Bad Request, 323B, 2ms]
+  ✓  [SPEC] status 400 Bad Request
+
+↳ FR16-TC-005 Missing products key
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [400 Bad Request, 323B, 1ms]
+  ✓  [SPEC] status 400 Bad Request
+
+↳ FR16-TC-006 products not array
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [400 Bad Request, 323B, 1ms]
+  ✓  [SPEC] status 400 Bad Request
+
+↳ FR16-TC-007 Missing product name
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 394B, 3ms]
+  ✓  [SPEC] reject import 400 or inserted 0
+
+❏ 03 Validation
+↳ FR16-TC-008 Price zero rejected
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 3ms]
+  2. [SPEC] status 400 Bad Request
+
+↳ FR16-TC-009 Price negative rejected
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 2ms]
+  3. [SPEC] status 400 Bad Request
+
+↳ FR16-TC-010 Price non-numeric rejected
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 2ms]
+  4. [SPEC] status 400 Bad Request
+
+↳ FR16-TC-011 Price missing rejected
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 2ms]
+  5. [SPEC] status 400 Bad Request
+
+↳ FR16-TC-012 Empty name rejected
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 394B, 1ms]
+  6. [SPEC] status 400 Bad Request
+
+↳ FR16-TC-013 Partial failure rollback all
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 394B, 2ms]
+  7. [SPEC] all-or-nothing: inserted 0 on mixed batch
+
+❏ 04 Rollback & Schema
+↳ FR16-TC-014 Response schema fields
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 3ms]
+  ✓  [SPEC] has message,inserted,errors
+
+↳ FR16-TC-015 inserted matches count
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 2ms]
+  ✓  [SPEC] inserted equals rows
+
+↳ FR16-TC-016 Invalid token
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [403 Forbidden, 295B, 1ms]
+  ✓  [SPEC] 403
+
+❏ 05 Security & HTTP
+↳ FR16-TC-017 GET method not allowed
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  GET http://127.0.0.1:3000/api/admin/import-products [404 Not Found, 468B, 1ms]
+  ✓  [SPEC] GET 404/405
+
+↳ FR16-TC-018 PUT not allowed
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  PUT http://127.0.0.1:3000/api/admin/import-products [404 Not Found, 468B, 1ms]
+  ✓  [SPEC] PUT 404/405
+
+↳ FR16-TC-019 SQLi in product name
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 2ms]
+  ✓  [SPEC] 200 or 400 without DB error
+
+↳ FR16-TC-020 XSS name not reflected
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 2ms]
+  ✓  [SPEC] no script in response
+
+↳ FR16-TC-021 category_id missing defaults valid
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 2ms]
+  ✓  [SPEC] status 200 with default category
+
+❏ 06 Domain
+↳ FR16-TC-022 category_id invalid
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 2ms]
+  8. [SPEC] status 400 Bad Request
+
+↳ FR16-TC-023 Batch multiple valid
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 2ms]
+  ✓  [SPEC] inserted 2
+
+↳ FR16-TC-024 Null products
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [400 Bad Request, 323B, 1ms]
+  ✓  [SPEC] status 400 Bad Request
+
+↳ FR16-TC-025 Empty object in array
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 394B, 1ms]
+  9. [SPEC] status 400 Bad Request
+
+↳ FR16-TC-026 Price float accepted or rejected
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 2ms]
+ 10. [SPEC] price must be positive integer
+
+↳ FR16-TC-027 Very long name
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 2ms]
+  ✓  [SPEC] 200 or 400
+
+↳ FR16-TC-028 Duplicate names in batch
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 3ms]
+  ✓  [SPEC] status 200
+
+↳ FR16-TC-029 Rate limit SEC07
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 2ms]
+ 11. [SPEC] 429
+
+↳ FR16-TC-030 Content-Type required
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [500 Internal Server Error, 2.02kB, 2ms]
+ 12. [SPEC] 400 without json body
+
+❏ 07 Edge
+↳ FR16-TC-031 description optional
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 2ms]
+  ✓  [SPEC] 200
+
+↳ FR16-TC-032 imageUrl optional
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 2ms]
+  ✓  [SPEC] 200
+
+↳ FR16-TC-033 Negative category_id
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 1ms]
+ 13. [SPEC] status 400 Bad Request
+
+↳ FR16-TC-034 Extra fields ignored
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 2ms]
+  ✓  [SPEC] 200 accepts known fields
+
+↳ FR16-TC-035 Admin role required explicit
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 2ms]
+ 14. [SPEC] admin only 403 for user
+
+↳ FR16-TC-036 Price string number
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 2ms]
+ 15. [SPEC] status 400 Bad Request
+
+↳ FR16-TC-037 Empty array element
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [500 Internal Server Error, 1.85kB, 1ms]
+ 16. [SPEC] status 400 Bad Request
+
+↳ FR16-TC-038 Response time
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 2ms]
+  ✓  [SPEC] < 2000ms
+
+↳ FR16-TC-039 Name whitespace only
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 2ms]
+ 17. [SPEC] status 400 Bad Request
+
+↳ FR16-TC-040 Large batch 10 items
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 360B, 6ms]
+  ✓  [SPEC] inserted 10
+
+❏ 08 Extended
+↳ FR16-TC-EXT-001 Role escalation user import
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 2ms]
+ 18. [SPEC] user cannot import 403
+
+↳ FR16-TC-EXT-002 No price validation zero
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 3ms]
+ 19. [SPEC] status 400 Bad Request
+
+↳ FR16-TC-EXT-003 Partial insert no rollback
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 394B, 2ms]
+ 20. [SPEC] must not partial insert 400
+
+↳ FR16-TC-EXT-004 Missing name only reports error but 200
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 394B, 1ms]
+ 21. [SPEC] reject entire batch on any invalid row
+
+↳ FR16-TC-EXT-005 Negative price accepted check
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 2ms]
+ 22. [SPEC] status 400 Bad Request
+
+↳ FR16-TC-EXT-006 Admin endpoint no role check in middleware
+  ┌
+  │ 'X-Student-Id:', '23127273'
+  └
+  POST http://127.0.0.1:3000/api/admin/import-products [200 OK, 357B, 2ms]
+ 23. [SPEC] authenticateToken only — need admin role 403
+
+┌─────────────────────────┬─────────────────┬─────────────────┐
+│                         │        executed │          failed │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│              iterations │               1 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│                requests │              48 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│            test-scripts │              48 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│      prerequest-scripts │              50 │               0 │
+├─────────────────────────┼─────────────────┼─────────────────┤
+│              assertions │              50 │              23 │
+├─────────────────────────┴─────────────────┴─────────────────┤
+│ total run duration: 674ms                                   │
+├─────────────────────────────────────────────────────────────┤
+│ total data received: 7.99kB (approx)                        │
+├─────────────────────────────────────────────────────────────┤
+│ average response time: 2ms [min: 1ms, max: 16ms, s.d.: 2ms] │
+└─────────────────────────────────────────────────────────────┘
+
+   #  failure         detail                                                                            
+                                                                                                        
+ 01.  AssertionError  [SPEC] non-admin forbidden 403                                                    
+                      expected response to have status code 403 but got 200                             
+                      at assertion:0 in test-script                                                     
+                      inside "01 Auth & Access / FR16-TC-002 User token not admin"                      
+                                                                                                        
+ 02.  AssertionError  [SPEC] status 400 Bad Request                                                     
+                      expected response to have status code 400 but got 200                             
+                      at assertion:0 in test-script                                                     
+                      inside "03 Validation / FR16-TC-008 Price zero rejected"                          
+                                                                                                        
+ 03.  AssertionError  [SPEC] status 400 Bad Request                                                     
+                      expected response to have status code 400 but got 200                             
+                      at assertion:0 in test-script                                                     
+                      inside "03 Validation / FR16-TC-009 Price negative rejected"                      
+                                                                                                        
+ 04.  AssertionError  [SPEC] status 400 Bad Request                                                     
+                      expected response to have status code 400 but got 200                             
+                      at assertion:0 in test-script                                                     
+                      inside "03 Validation / FR16-TC-010 Price non-numeric rejected"                   
+                                                                                                        
+ 05.  AssertionError  [SPEC] status 400 Bad Request                                                     
+                      expected response to have status code 400 but got 200                             
+                      at assertion:0 in test-script                                                     
+                      inside "03 Validation / FR16-TC-011 Price missing rejected"                       
+                                                                                                        
+ 06.  AssertionError  [SPEC] status 400 Bad Request                                                     
+                      expected response to have status code 400 but got 200                             
+                      at assertion:0 in test-script                                                     
+                      inside "03 Validation / FR16-TC-012 Empty name rejected"                          
+                                                                                                        
+ 07.  AssertionError  [SPEC] all-or-nothing: inserted 0 on mixed batch                                  
+                      expected response to have status code 400 but got 200                             
+                      at assertion:0 in test-script                                                     
+                      inside "03 Validation / FR16-TC-013 Partial failure rollback all"                 
+                                                                                                        
+ 08.  AssertionError  [SPEC] status 400 Bad Request                                                     
+                      expected response to have status code 400 but got 200                             
+                      at assertion:0 in test-script                                                     
+                      inside "06 Domain / FR16-TC-022 category_id invalid"                              
+                                                                                                        
+ 09.  AssertionError  [SPEC] status 400 Bad Request                                                     
+                      expected response to have status code 400 but got 200                             
+                      at assertion:0 in test-script                                                     
+                      inside "06 Domain / FR16-TC-025 Empty object in array"                            
+                                                                                                        
+ 10.  AssertionError  [SPEC] price must be positive integer                                             
+                      expected response to have status code 400 but got 200                             
+                      at assertion:0 in test-script                                                     
+                      inside "06 Domain / FR16-TC-026 Price float accepted or rejected"                 
+                                                                                                        
+ 11.  AssertionError  [SPEC] 429                                                                        
+                      expected response to have status code 429 but got 200                             
+                      at assertion:0 in test-script                                                     
+                      inside "06 Domain / FR16-TC-029 Rate limit SEC07"                                 
+                                                                                                        
+ 12.  AssertionError  [SPEC] 400 without json body                                                      
+                      expected 500 to be one of [ 400, 415 ]                                            
+                      at assertion:0 in test-script                                                     
+                      inside "06 Domain / FR16-TC-030 Content-Type required"                            
+                                                                                                        
+ 13.  AssertionError  [SPEC] status 400 Bad Request                                                     
+                      expected response to have status code 400 but got 200                             
+                      at assertion:0 in test-script                                                     
+                      inside "07 Edge / FR16-TC-033 Negative category_id"                               
+                                                                                                        
+ 14.  AssertionError  [SPEC] admin only 403 for user                                                    
+                      expected response to have status code 403 but got 200                             
+                      at assertion:0 in test-script                                                     
+                      inside "07 Edge / FR16-TC-035 Admin role required explicit"                       
+                                                                                                        
+ 15.  AssertionError  [SPEC] status 400 Bad Request                                                     
+                      expected response to have status code 400 but got 200                             
+                      at assertion:0 in test-script                                                     
+                      inside "07 Edge / FR16-TC-036 Price string number"                                
+                                                                                                        
+ 16.  AssertionError  [SPEC] status 400 Bad Request                                                     
+                      expected response to have status code 400 but got 500                             
+                      at assertion:0 in test-script                                                     
+                      inside "07 Edge / FR16-TC-037 Empty array element"                                
+                                                                                                        
+ 17.  AssertionError  [SPEC] status 400 Bad Request                                                     
+                      expected response to have status code 400 but got 200                             
+                      at assertion:0 in test-script                                                     
+                      inside "07 Edge / FR16-TC-039 Name whitespace only"                               
+                                                                                                        
+ 18.  AssertionError  [SPEC] user cannot import 403                                                     
+                      expected response to have status code 403 but got 200                             
+                      at assertion:0 in test-script                                                     
+                      inside "08 Extended / FR16-TC-EXT-001 Role escalation user import"                
+                                                                                                        
+ 19.  AssertionError  [SPEC] status 400 Bad Request                                                     
+                      expected response to have status code 400 but got 200                             
+                      at assertion:0 in test-script                                                     
+                      inside "08 Extended / FR16-TC-EXT-002 No price validation zero"                   
+                                                                                                        
+ 20.  AssertionError  [SPEC] must not partial insert 400                                                
+                      expected response to have status code 400 but got 200                             
+                      at assertion:0 in test-script                                                     
+                      inside "08 Extended / FR16-TC-EXT-003 Partial insert no rollback"                 
+                                                                                                        
+ 21.  AssertionError  [SPEC] reject entire batch on any invalid row                                     
+                      expected response to have status code 400 but got 200                             
+                      at assertion:0 in test-script                                                     
+                      inside "08 Extended / FR16-TC-EXT-004 Missing name only reports error but 200"    
+                                                                                                        
+ 22.  AssertionError  [SPEC] status 400 Bad Request                                                     
+                      expected response to have status code 400 but got 200                             
+                      at assertion:0 in test-script                                                     
+                      inside "08 Extended / FR16-TC-EXT-005 Negative price accepted check"              
+                                                                                                        
+ 23.  AssertionError  [SPEC] authenticateToken only — need admin role 403                               
+                      expected response to have status code 403 but got 200                             
+                      at assertion:0 in test-script                                                     
+                      inside "08 Extended / FR16-TC-EXT-006 Admin endpoint no role check in middleware" 
